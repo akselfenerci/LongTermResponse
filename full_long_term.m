@@ -108,22 +108,13 @@ flt_int = 0;
 resp = 0.001;
 
 for i = 1:length(Uint)-1
-    dU = Uint(i+1) - Uint(i);
-    Uav =  (Uint(i+1) - Uint(i)) /2;
     
     for j = 1:length(sigmauint)-1
         
-        dsigmau = sigmauint(j+1) - sigmauint(j);
-        sigmauav =  (sigmauint(j+1) - sigmauint(j)) /2;
-        
         for k = 1:length(sigmawint)-1
            
-            dsigmaw = sigmawint(k+1) - sigmawint(k);
-            sigmawav =  (sigmawint(k+1) - sigmawint(k)) /2;
+            int(i,j,k) = LT_int( Uav,sigmauav,sigmawav,resp );
             
-            [ int ] = LT_int( Uav,sigmauav,sigmawav,resp );
-            
-            flt_int = flt_int + int*dU*dsigmau*dsigmaw;
         end
     end
 end
@@ -134,7 +125,7 @@ end
 
 Uvals = 1:1:40;
 sigmauvals = 0:0.5:10;
-sigmawvals = 0:0.5:5;
+sigmawvals = 0:0.5:6;
 
 load('settings.mat');
 
@@ -152,40 +143,67 @@ for i = 1:length(Uvals)
             
             wind_input.sigmaw = sigmawvals(k);
 
-            ST_resp_std(i,j,k) = short_term_response( settings,wind_input );
+            [ST_resp_std(i,j,k), ST_resp_stddot(i,j,k)] = short_term_response( settings,wind_input );
             
         end
     end
 end
 
+save('ST_response','ST_resp_std','ST_resp_stddot');
 
 
 
+[X,Y,Z] = meshgrid(sigmauvals,Uvals,sigmawvals);
+
+sz = size(X);
+product = 1;
+for i = 1:length(sz)
+    product = product*sz(i);
+end
+X = reshape(X,[product,1]);
+Y = reshape(Y,[product,1]);
+Z = reshape(Z,[product,1]);
+ST_resp_std_vec = reshape(ST_resp_std, [product,1]);
+ST_resp_stddot_vec = reshape(ST_resp_stddot, [product,1]);
+
+tbl = table(X,Y,Z,real(ST_resp_std_vec),'VariableNames',{'U','sigma_u','sigma_w','Resp_std'});
+tbldot = table(X,Y,Z,real(ST_resp_stddot_vec),'VariableNames',{'U','sigma_u','sigma_w','Resp_stddot'});
+
+% lmSTD = fitlm(tbl,'Resp_std~U+sigma_u+sigma_w','modelspec','quadratic');
+% lmSTDdot = fitlm(tbl,'Resp_stddot~U+sigma_u+sigma_w','modelspec','quadratic');
+
+lmSTD = fitlm([X Y Z],real(ST_resp_std_vec) ,'quadratic');
+lmSTDdot = fitlm([X Y Z],real(ST_resp_stddot_vec) ,'quadratic');
+
+ [ypred,yci] = predict(lm,[50 8 4]);
+
+save('RSmodel','lmSTD','lmSTDdot');
 
 
 
+%%
 
 
+Uvals = 1:1:40;
+sigmauvals = 0.1:0.5:10;
+sigmawvals = 0.1:0.5:6;
 
+[X,Y,Z] = meshgrid(sigmauvals,Uvals,sigmawvals);
 
+sz = size(X);
+product = 1;
+for i = 1:length(sz)
+    product = product*sz(i);
+end
 
+X = reshape(X,[product,1]);
+Y = reshape(Y,[product,1]);
+Z = reshape(Z,[product,1]);
 
+resp = 0.8;
+LTfun = @(x,y,z) LTint_RSM(x,y,z,resp,lmSTD,lmSTDdot);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ints = arrayfun(LTfun, X,Y,Z);
 
 
 
