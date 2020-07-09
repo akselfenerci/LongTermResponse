@@ -19,11 +19,11 @@ settings = settings_bridge(settings);
 settings = settings_wind(settings);
 settings = settings_hydro(settings);
 
-
+save('settings','settings');
 
 %% Import aerodynamic data
 
-adFits(1) = load(strcat(settings.AD.target,'\',settings.AD.target_name_AD));
+% adFits(1) = load(strcat(settings.AD.target,'\',settings.AD.target_name_AD));
 
 
 %% Construct modal matrices for FEM model
@@ -52,17 +52,17 @@ genKs = phiphi'*KK*phiphi;
 genCs = phiphi'*CC*phiphi;
 
 
-Vref = settings.bridge.U;          % Mean wind velocity in reference point
-Xref = [0 0 0]';    % Position of reference point
-eV1 = [0 1 0]';             % Direction of mean wind velocity in global coordinates
-eV2tmp = -[1 1 0]';        % Vector in the eV1-eV2 plane
-eLe2 = [0, 1, 0];
-[TG2V] = wawi.misc.transform_unit(eV1, eV2tmp);       % Define the transformation matrix Global 2 local for the Mean wind
-
-nodes = [1 0 0 10
-    2 1 0 10];
-elements = [1 1 2 1];
-TG2Le0 = wawi.misc.element_transform_matrices(elements, nodes, eLe2);
+% Vref = settings.bridge.U;          % Mean wind velocity in reference point
+% Xref = [0 0 0]';    % Position of reference point
+% eV1 = [0 1 0]';             % Direction of mean wind velocity in global coordinates
+% eV2tmp = -[1 1 0]';        % Vector in the eV1-eV2 plane
+% eLe2 = [0, 1, 0];
+% [TG2V] = wawi.misc.transform_unit(eV1, eV2tmp);       % Define the transformation matrix Global 2 local for the Mean wind
+% 
+% nodes = [1 0 0 10
+%     2 1 0 10];
+% elements = [1 1 2 1];
+% TG2Le0 = wawi.misc.element_transform_matrices(elements, nodes, eLe2);
 
 % wawi.plot.plotwindelements(figure(1), figure(2), nodes, elements, TG2Le0, TG2V)
 
@@ -86,9 +86,9 @@ genKadd = -genKae;
 invH = wawi.pred.freq.frf(omegaGlobal, genMs, genCs, genKs, genMadd, genCadd, genKadd,false);
 
 %% Eigenvalue solution
-Ktot = wawi.misc.matrixsum(genKs, genKadd);
-Ctot = wawi.misc.matrixsum(genCs, genCadd);
-Mtot = wawi.misc.matrixsum(genMs, genMadd);
+% Ktot = wawi.misc.matrixsum(genKs, genKadd);
+% Ctot = wawi.misc.matrixsum(genCs, genCadd);
+% Mtot = wawi.misc.matrixsum(genMs, genMadd);
 
 % [lambda, psi] = wawi.eig.iteratemodes(Ktot, Ctot, Mtot, omegaGlobal);
 
@@ -112,7 +112,6 @@ genAeroSqSq = wawi.wind.windaction(omegaGlobal, Sfun, Vref, Xref, loadCoeff, nod
 %% Total action
 
 genSqSq = genAeroSqSq;
-
 
 genSrSr = wawi.pred.freq.freqsim(invH, genSqSq,false);
 

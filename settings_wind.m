@@ -9,8 +9,8 @@ settings.wind.button_ex = 'on';
 % settings.wind.sigmau = 4;
 % settings.wind.sigmaw = 2;
 
-settings.wind.U = settings.bridge.U;
-% settings.wind.U = 32;
+% settings.wind.U = settings.bridge.U;
+settings.wind.U = 32;
 
 settings.wind.Au = 10;
 settings.wind.Aw = 1.15;
