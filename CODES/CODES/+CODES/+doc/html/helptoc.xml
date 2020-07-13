@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding="utf-8"?>
+<toc version="2.0">
+    <tocitem target="CODES.html">CODES
+        <tocitem target="user_guide.html" image="HelpIcon.USER_GUIDE">User Guides
+            <tocitem target="installation.html">Installation</tocitem>
+            <tocitem target="general.html">General Information</tocitem>
+        </tocitem>
+        <tocitem target="getting_started.html" image="HelpIcon.GETTING_STARTED">Getting started</tocitem>
+        <tocitem target="fit_main.html" image="HelpIcon.FUNCTION">Meta-models
+            <tocitem target="svm.html">Support Vector Machine
+                <tocitem target="svm.html#syntax">Syntax</tocitem>
+                <tocitem target="svm.html#description">Description</tocitem>
+                <tocitem target="svm.html#training">Training Options</tocitem>
+                <tocitem target="svm_method.html">Evaluation and Post-Processing</tocitem>
+                <tocitem target="svm.html#example">Examples</tocitem>
+            </tocitem>
+            <tocitem target="kriging.html">Kriging
+                <tocitem target="kriging.html#syntax">Syntax</tocitem>
+                <tocitem target="kriging.html#description">Description</tocitem>
+                <tocitem target="kriging.html#training">Training Options</tocitem>
+                <tocitem target="kriging_method.html">Evaluation and Post-Processing</tocitem>
+                <tocitem target="kriging.html#example">Examples</tocitem>
+            </tocitem>
+        </tocitem>
+        <tocitem target="method.html" image="HelpIcon.FUNCTION">Adaptive sampling
+            <tocitem target="cvt.html">Central Voronoi Tesselation</tocitem>
+            <tocitem target="edsd.html">Explicit Design Space Decomposition</tocitem>
+            <tocitem target="mm.html">Max-min sampling</tocitem>
+            <tocitem target="anti_lock.html">Anti-locking sample</tocitem>
+            <tocitem target="gmm.html">Generalized Max-Min sampling</tocitem>
+        </tocitem>
+        <tocitem target="sensitivity.html" image="HelpIcon.FUNCTION">Sensitivity analysis
+            <tocitem target="corr_main.html">Correlation coefficient</tocitem>
+            <tocitem target="dgsm.html">Derivative-based Global Sensitivity Measure</tocitem>
+            <tocitem target="sobol.html">Sobol' indices</tocitem>
+        </tocitem>
+        <tocitem target="reliability.html" image="HelpIcon.FUNCTION">Reliability assessment
+            <tocitem target="mc.html">Sampling-based methods
+                <tocitem target="mc.html">Crude Monte Carlo</tocitem>
+                <tocitem target="subset.html">Subset Simulation</tocitem>
+            </tocitem>
+            <tocitem target="form.html">Moment-based methods
+                <tocitem target="form.html">First Order Realibility Method</tocitem>
+                <tocitem target="iform.html">Inverse FORM</tocitem>
+                <tocitem target="sorm.html">Second Order Reliability Method</tocitem>
+            </tocitem>
+            <tocitem target="Test_reliability_mc.html#sensitivities">Sensitivities
+                <tocitem target="Test_reliability_mc.html#sensitivities">Crude Monte Carlo</tocitem>
+                <tocitem target="Test_reliability_subset.html#sensitivities">Subset Simulation</tocitem>
+                <tocitem target="Test_reliability_form.html#sensitivities">First Order Realibility Method</tocitem>
+                <tocitem target="Test_reliability_iform.html#sensitivities">Inverse FORM</tocitem>
+            </tocitem>
+        </tocitem>
+        <tocitem target="common.html" image="HelpIcon.FUNCTION">Other functions
+            <tocitem target="mcmc.html" image="HelpIcon.FUNCTION">Functions
+                <tocitem target="mcmc.html">Component MCMC</tocitem>
+                <tocitem target="multi_fmincon.html">Multistart fmincon</tocitem>
+                <tocitem target="grad_fd.html">Finite difference gradient</tocitem>
+                <tocitem target="hess_fd.html">Finite difference hessian</tocitem>
+            </tocitem>
+            <tocitem target="disp_box.html" image="HelpIcon.FUNCTION">Utilities
+                <tocitem target="disp_box.html">Display framed text</tocitem>
+                <tocitem target="disp_matrix.html">Display labeled matrix</tocitem>
+                <tocitem target="linecount.html">Count lines in file</tocitem>
+                <tocitem target="snapshot.html">Export figures</tocitem>
+                <tocitem target="struct2nv.html">struct2nv</tocitem>
+                <tocitem target="time.html">Display formated time</tocitem>
+                <tocitem target="hist_fd.html">Histogram with PDF overlay</tocitem>
+            </tocitem>
+        </tocitem>
+        <tocitem target="demo.html" image="HelpIcon.EXAMPLES">Examples
+            <tocitem target="demo_fit.html">Meta-models
+                <tocitem target="Test_fit_svm.html">Support Vector Machine</tocitem>
+                <tocitem target="Test_fit_svm_path.html">SVM path illustration</tocitem>
+                <tocitem target="Test_fit_svm_param_select.html">Parameters selection techniques demonstration</tocitem>
+                <tocitem target="Test_fit_kriging.html">Kriging</tocitem>
+            </tocitem>
+            <tocitem target="demo_method.html">Adaptive sampling
+                <tocitem target="Test_method_anti_lock.html">Anti-locking sample</tocitem>
+                <tocitem target="Test_method_cvt.html">Central Voronoi Tesselation</tocitem>
+                <tocitem target="Test_method_edsd.html">Explicit Design Space Decomposition</tocitem>
+                <tocitem target="Test_method_gmm.html">Generalized Max-Min sampling</tocitem>
+                <tocitem target="Test_method_mm.html">Max-Min sampling</tocitem>
+            </tocitem>
+            <tocitem target="demo_sensitivity.html">Sensitivity analysis
+                <tocitem target="Test_sensitivity_corr.html">Correlation coefficient</tocitem>
+                <tocitem target="Test_sensitivity_dgsm.html">Derivative-based Global Sensitivity Measure</tocitem>
+                <tocitem target="Test_sensitivity_sobol.html">Sobol' indices</tocitem>
+            </tocitem>
+            <tocitem target="demo_reliability.html">Reliability assessment
+                <tocitem target="Test_reliability_mc.html">Crude Monte Carlo</tocitem>
+                <tocitem target="Test_reliability_form.html">First Order Realibility Method</tocitem>
+                <tocitem target="Test_reliability_iform.html">Inverse FORM</tocitem>
+                <tocitem target="Test_reliability_sorm.html">Second Order Reliability Method</tocitem>
+                <tocitem target="Test_reliability_subset.html">Subset Simulation</tocitem>
+            </tocitem>
+        </tocitem>
+        <tocitem target="http://codes.arizona.edu" image="$toolbox/matlab/icons/webicon.gif">
+            CODES Website
+        </tocitem>
+    </tocitem>
+</toc>

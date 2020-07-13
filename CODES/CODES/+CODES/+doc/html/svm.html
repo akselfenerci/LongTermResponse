@@ -1,0 +1,484 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>CODES / fit / svm</title><meta name="generator" content="MATLAB 8.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-06-23"><meta name="DC.source" content="svm.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1><a href="CODES.html">CODES</a> / <a href="fit_main.html">fit</a> / svm</h1><!--introduction--><p><i>Train a Support Vector Machine</i></p><p>
+  <style type="text/css">
+    span.string{color:#A020F0;font-family:monospace;}
+    p{text-align: justify;}
+  </style>
+</p><p><a id="syntax"></a></p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Syntax</a></li><li><a href="#2">Description</a></li><li><a href="#3">Training Options</a></li><li><a href="#4">Evaluation and Post-Processing</a></li><li><a href="#5">Mini tutorials</a></li><li><a href="#6">References</a></li></ul></div><h2>Syntax<a name="1"></a></h2><div><ul><li><tt>svm=CODES.fit.svm(x,y)</tt> builds an svm based on the training set <tt>(x,y)</tt>.</li><li><tt>svm=CODES.fit.svm(...,param,value)</tt> uses a list of parameters <tt>param</tt> and values <tt>value</tt> (<i>c.f.</i>, <a href="#params">parameter table</a>).</li></ul></div><p><a id="description"></a></p><h2>Description<a name="2"></a></h2><p>Support Vector Machine (SVM) is a machine learning classification tool. Its core idea relies on the definition of an optimal decision function. In the linear case, the decision function is a hyper-plane which is defined through the following quadratic optimization problem:</p><p><img src="svm_eq18426225404118202136.png" alt="$$\begin{array}{rll}\mathop{\min}\limits_{\beta,b}&amp;\frac{1}{2}||\beta||^2\\\textbf{s.t.}&amp;1-l_i(\beta^T\mathbf{x}^{(i)}+b)\leq0&amp;\forall i=\{1,\ldots,n\}\end{array}$$"></p><p>where <img src="svm_eq08984225997457563733.png" alt="$n$"> is the number of training samples, and the optimal separating plane is defined as <img src="svm_eq15209260751292326664.png" alt="$\beta^T\mathbf{x}+b=0$">. The constant <img src="svm_eq02044268985122151499.png" alt="$b$"> (sometimes referred to as <img src="svm_eq07186387149644750395.png" alt="$\beta_0$">) is called the bias, <img src="svm_eq14615299870812348113.png" alt="$\mathbf{x}^{(i)}$"> is the <img src="svm_eq11690404991072700141.png" alt="$i\textrm{\textsuperscript{th}}$"> training sample, and <img src="svm_eq02877492017820249920.png" alt="$l^{(i)}$"> the <img src="svm_eq11690404991072700141.png" alt="$i\textrm{\textsuperscript{th}}$"> label.  As per convention, labels <img src="svm_eq02877492017820249920.png" alt="$l^{(i)}$"> derive from function values <img src="svm_eq17586692898611367280.png" alt="$y^{(i)}$"> such that:</p><p><img src="svm_eq11457713801719032769.png" alt="$$l^{(i)}=\left\{\begin{array}{ll}+1&amp;\textrm{if }y^{(i)}&gt;0\\-1&amp;\textrm{if }y^{(i)}\leq0\end{array}\right.$$"></p><p>Note: in the case of a response <img src="svm_eq18096895394918367257.png" alt="$f$">, and a threshold <img src="svm_eq09243788140987934853.png" alt="$f_0$">, the classification is performed on the sign of a limit state function <img src="svm_eq08830444604280721118.png" alt="$y$"> defined as <img src="svm_eq03482203512571345613.png" alt="$y(x)=f(x)-f_0$">  or  <img src="svm_eq16323662554187862738.png" alt="$y(x)=f_0-f(x)$">.</p><p>In the case of non-separable data, the optimization problem is infeasible and needs to be relaxed. This is done through the introduction of slack variables <img src="svm_eq10577947879028940122.png" alt="$\xi_i$">:</p><p><img src="svm_eq08872918666686480145.png" alt="$$\begin{array}{rll}\mathop{\min}\limits_{\beta,b,\xi}&amp;\frac{1}{2}||\beta||^2+\frac{C}{L}\displaystyle\sum_{i=1}^n\xi_i^L\\\textbf{s.t.}&amp;1-l_i(\beta^T\mathbf{x}^{(i)}+b)-\xi_i\leq0&amp;\forall i=\{1,\ldots,n\}\\&amp;\xi_i\geq0&amp;\forall i=\{1,\ldots,n\}\end{array}$$"></p><p>where <img src="svm_eq11904963258706611165.png" alt="$L$"> is either 1 or 2 and represents the loss function used. In the remainder of this help, <img src="svm_eq02985578279791253994.png" alt="$L=1$"> (L1 SVM) is used but can be easily extended to L2 SVM. Using Karush-Kuhn-Tucker conditions, one can show that:</p><p><img src="svm_eq00197075954738608748.png" alt="$$\left\{\begin{array}{rcl}0&amp;=&amp;\displaystyle\sum_{i=1}^n\alpha_il^{(i)}\\\beta&amp;=&amp;\displaystyle\sum_{i=1}^n\alpha_il^{(i)}\mathbf{x}^{(i)}\\\alpha_i&amp;=&amp;C-\mu_i\end{array}\right.$$"></p><p>where <img src="svm_eq11703973680670173031.png" alt="$\alpha_i$"> and <img src="svm_eq15347993106352020686.png" alt="$\mu_i$"> are the <img src="svm_eq11690404991072700141.png" alt="$i\textrm{\textsuperscript{th}}$"> Lagrange multiplier associated to the first and second set of constraints,respectively. This leads to the dual problem:</p><p><img src="svm_eq16861397803665971897.png" alt="$$\begin{array}{rll}\mathop{\max}\limits_{\alpha}&amp;\displaystyle\sum_{i=1}^n\alpha_i-\frac{1}{2}\displaystyle\sum_{i=1}^n\displaystyle\sum_{j=1}^n\alpha_i\alpha_jl^{(i)}l^{(j)}\mathbf{x}^{(i)T}\mathbf{x}^{(j)}\\\textbf{s.t.}&amp;0\leq\alpha_i\leq C&amp;\forall i=\{1,\ldots,n\}\\&amp;\displaystyle\sum_{i=1}^n\alpha_il^{(i)}=0\end{array}$$"></p><p>Finally, the so-called kernel trick consists in recognizing that the scalar product <img src="svm_eq09549370893047521155.png" alt="$x^Ty$"> could be replaced by a kernel function <img src="svm_eq09383517553865297800.png" alt="$K_\theta$"> of parameter <img src="svm_eq08288499342375314727.png" alt="$\theta$"> such that the dual problem becomes:</p><p><img src="svm_eq13198901335625790277.png" alt="$$\begin{array}{rll}\mathop{\max}\limits_{\alpha}&amp;\displaystyle\sum_{i=1}^n\alpha_i-\frac{1}{2}\displaystyle\sum_{i=1}^n\displaystyle\sum_{j=1}^n\alpha_i\alpha_jl^{(i)}l^{(j)}K_\theta(\mathbf{x}^{(i)},\mathbf{x}^{(j)})\\\textbf{s.t.}&amp;0\leq\alpha_i\leq C&amp;\forall i=\{1,\ldots,n\}\\&amp;\displaystyle\sum_{i=1}^n\alpha_il^{(i)}=0\end{array}$$"></p><p>For an in-depth discussion of Support Vector Machine and Machine Learning, the interested reader is referred to <a href="#ref_vap">Vapnik (2000)</a>.</p><p>Slack variables, bias, Lagrange multipliers, and indices of the support vectors can be obtained using: <tt>svm.xis</tt>, <tt>svm.bias</tt>, <tt>svm.alphas</tt>, and <tt>svm.SVs</tt>.</p><p><a id="kernels"></a></p><p><h3>Kernels</h3></p><p>Two kernels are available:</p><div><ul><li>Linear:</li></ul></div><p><img src="svm_eq00000165966845817511.png" alt="$$K(x,y)=x^Ty$$"></p><div><ul><li>Gaussian:</li></ul></div><p><img src="svm_eq15596777703868936788.png" alt="$$K_\theta(x,y)=\exp\left[\frac{||x-y||^2}{2\theta^2}\right]$$"></p><p><a id="solvers"></a></p><p><h3>Solvers</h3></p><p>Three solvers are implemented:</p><div><ul><li>Primal (linear kernel only), uses <tt>quadprog</tt> to solve:</li></ul></div><p><img src="svm_eq08872918666686480145.png" alt="$$\begin{array}{rll}\mathop{\min}\limits_{\beta,b,\xi}&amp;\frac{1}{2}||\beta||^2+\frac{C}{L}\displaystyle\sum_{i=1}^n\xi_i^L\\\textbf{s.t.}&amp;1-l_i(\beta^T\mathbf{x}^{(i)}+b)-\xi_i\leq0&amp;\forall i=\{1,\ldots,n\}\\&amp;\xi_i\geq0&amp;\forall i=\{1,\ldots,n\}\end{array}$$"></p><p>Ideas to extend the primal solver can be found in <a href="#ref_cha">Chapelle (2007)</a>.</p><div><ul><li>Dual, uses <tt>quadprog</tt> to solve:</li></ul></div><p><img src="svm_eq15850044635021335194.png" alt="$$\begin{array}{rll}\textrm{If }L=1\ :\ \mathop{\max}\limits_{\alpha}&amp;\displaystyle\sum_{i=1}^n\alpha_i-\frac{1}{2}\displaystyle\sum_{i=1}^n\displaystyle\sum_{j=1}^n\alpha_i\alpha_jl^{(i)}l^{(j)}K_\theta(\mathbf{x}^{(i)},\mathbf{x}^{(j)})\\\textbf{s.t.}&amp;0\leq\alpha_i\leq C&amp;\forall i=\{1,\ldots,n\}\\&amp;\displaystyle\sum_{i=1}^n\alpha_il^{(i)}=0\end{array}$$"></p><p><img src="svm_eq00753639729423255828.png" alt="$$\begin{array}{rll}\textrm{If }L=2\ :\ \mathop{\max}\limits_{\alpha}&amp;\displaystyle\sum_{i=1}^n\alpha_i-\frac{1}{2}\displaystyle\sum_{i=1}^n\displaystyle\sum_{j=1}^n\alpha_i\alpha_jl^{(i)}l^{(j)}\left(K_\theta(\mathbf{x}^{(i)},\mathbf{x}^{(j)})+\frac{\delta_{ij}}{C}\right)\\\textbf{s.t.}&amp;0\leq\alpha_i&amp;\forall i=\{1,\ldots,n\}\\&amp;\displaystyle\sum_{i=1}^n\alpha_il^{(i)}=0\end{array}$$"></p><div><ul><li>libSVM, presented in <a href="#ref_libsvm">Chang and Lin (2011)</a> uses an extremly efficient SMO-type algorithm to solve the dual formulation.</li></ul></div><p><a id="weights"></a></p><p><h3>Weighted formulation</h3></p><p><a href="#ref_osuna">Osuna et al. (1997)</a> and <a href="#ref_vap">Vapnik (2000)</a> introduced different cost coefficients (i.e., weights) for the different classes in the SVM formulation. The corresponding linear formulation is:</p><p><img src="svm_eq15482659187519966778.png" alt="$$\begin{array}{rl}\mathop{\min}\limits_{\mathbf{w},\mathbf{\xi},b}&amp;\frac{1}{2} \|\mathbf{w}\|^2 + C^+ \sum_{i=1}^{N^+} \xi_i + C^- \sum_{i=1}^{N^-} \xi_i\\\textbf{s.t.}&amp;y_i(\mathbf{w}\cdot \mathbf{x}_i - b) \ge 1 - \xi_i\\&amp;\xi_i \ge 0 , i = 1,\dots,N\end{array}$$"></p><p>where <img src="svm_eq03755468053790238414.png" alt="$C^+$"> and <img src="svm_eq05566901170299649206.png" alt="$C^-$"> are cost coefficients for the +1 and -1 classes respectively. <img src="svm_eq09597499371621996778.png" alt="$N^+$"> and <img src="svm_eq06813231076499012629.png" alt="$N^-$"> are the number of samples from +1 and -1 classes. The coefficients are typically chosen as <a href="#ref_libsvm">(Chang and Lin, 2011)</a>:</p><p><img src="svm_eq09663489217822260598.png" alt="$$\begin{array}{r}C^+ = C \times w^+\\C^- = C \times w^-\end{array}$"></p><p>where <img src="svm_eq03986222445007418011.png" alt="$C$"> is the common cost coefficient for both classes, <img src="svm_eq02796041390324012549.png" alt="$w^+$"> and <img src="svm_eq18031082490252842711.png" alt="$w^-$"> are the weights for +1 and -1 class respectively. The weights are typically chosen as:</p><p><img src="svm_eq04308290103572550610.png" alt="$$w^+ = 1$$"></p><p><img src="svm_eq18354231524078483706.png" alt="$$w^- = \frac{N^+}{N^-}$$"></p><p><a id="training"></a></p><h2>Training Options<a name="3"></a></h2><p><table id="params" style="border: none">
+  <tr>
+    <th><span class="ms">param</span></th>
+    <th><span class="ms">value</span></th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><span class="string">'scale'</span></td>
+    <td>{<span class="string">'square'</span>}, <span class="string">'circle'</span>, <span class="string">'none'</span></td>
+    <td>Define scaling method for the inputs (<i>c.f.</i>, <a href=#scaling>Scaling</a> for details)</td>
+  </tr>
+  <tr>
+    <td><span class="string">'UseParallel'</span></td>
+    <td>logical, {<tt>false</tt>}</td>
+    <td>Switch to use parallel settings</td>
+  </tr>
+  <tr>
+    <td><span class="string">'theta'</span></td>
+    <td>numeric, { [ ] }</td>
+    <td>Value for kernel parameter. If [ ], should be calibrated.</td>
+  </tr>
+  <tr>
+    <td><span class="string">'kernel'</span></td>
+    <td>{<span class="string">'gauss'</span>}, <span class="string">'lin'</span></td>
+    <td>Kernel type, see <a href=#kernels>Kernels</a>.</td>
+  </tr>
+  <tr>
+    <td><span class="string">'solver'</span></td>
+    <td>{<span class="string">'libsvm'</span>}, <span class="string">'dual'</span>, <span class="string">'primal'</span></td>
+    <td>Type of solver to use to solve the SVM optimization problem, see <a href=#solvers>Solvers</a>.</td>
+  </tr>
+  <tr>
+    <td><span class="string">'loss'</span></td>
+    <td>{1}, 2</td>
+    <td>Loss function.</td>
+  </tr>
+  <tr>
+    <td><span class="string">'C'</span></td>
+    <td>positive numeric, { [ ] }</td>
+    <td>Cost parameter. If [ ], should be calibrated.</td>
+  </tr>
+  <tr>
+    <td><span class="string">'weight'</span></td>
+    <td>logical, {<tt>false</tt>}</td>
+    <td>If <tt>true</tt>, train weighted SVM, see <a href=#weights>Weighted formulation</a>.</td>
+  </tr>
+  <tr>
+    <td><span class="string">'w_plus'</span></td>
+    <td>numeric, {1}</td>
+    <td>Weight for +1 samples. If default and <span class="string">'weight'</span> is <tt>true</tt>, weight computed based on sample imbalance.</td>
+  </tr>
+  <tr>
+    <td><span class="string">'w_minus'</span></td>
+    <td>numeric, {1}</td>
+    <td>Weight for -1 samples. If default and <span class="string">'weight'</span> is <tt>true</tt>, weight computed based on sample imbalance.</td>
+  </tr>
+  <tr>
+    <td><span class="string">'param_select'</span></td>
+    <td><ul style="margin-bottom:0px;">
+      <li>{<span class="string">'fast'</span>}</li>
+      <li><span class="string">'loo'</span></li>
+      <li><span class="string">'cv'</span></li>
+      <li><span class="string">'chapelle'</span></li>
+      <li><span class="string">'Nsv'</span></li>
+      <li><span class="string">'loo_bal'</span></li>
+      <li><span class="string">'cv_bal'</span></li>
+      <li><span class="string">'chapelle_bal'</span></li>
+      <li><span class="string">'Nsv_bal'</span></li>
+      <li><span class="string">'auc'</span></li>
+      <li><span class="string">'cv_auc'</span></li>
+      <li><span class="string">'stiffest'</span></li>
+    </ul></td>
+    <td>Kernel parameter calibration strategy, see <a href=Test_fit_svm_param_select.html>svm (parameters selection)</a>. Kernel parameters are optimized such that they either minimize (maximize in the case of the AUC) the elected metric or satisfy some heuristic (<span class="string">'fast'</span> or <span class="string">'stiffest'</span>).</td>
+  </tr>
+</table></p><p><a id="properties"></a></p><p><a id="evaluation"></a></p><h2>Evaluation and Post-Processing<a name="4"></a></h2><p>
+<link rel="stylesheet" type="text/css" href="demoindex.css"></link>
+    <table id="demo_table" border="0" cellspacing="0" cellpadding="0" style="width:491px">
+        <tr class="demorow">
+            <td class="demopanel-thumbnail"><a href="svm_method.html"><img src="type_m-file.png"></a></td>
+            <td class="demopanel-description"><a href="svm_method.html">Capabilities of an <tt>svm</tt> object.</a><br></td>
+        </tr>
+    </table>
+</p><p><a id="example"></a></p><h2>Mini tutorials<a name="5"></a></h2><p>
+<link rel="stylesheet" type="text/css" href="demoindex.css"></link>
+    <table id="demo_table" border="0" cellspacing="0" cellpadding="0" style="width:491px">
+        <tr class="demorow">
+            <td class="demopanel-thumbnail"><a href="Test_fit_svm.html"><img src="type_m-file.png"></a></td>
+            <td class="demopanel-description"><a href="Test_fit_svm.html">A mini tutorial of the capabilities of the <tt>svm</tt> class.</a><br></td>
+        </tr>
+        <tr class="demorow">
+            <td class="demopanel-thumbnail"><a href="Test_fit_svm_param_select.html"><img src="type_m-file.png"></a></td>
+            <td class="demopanel-description"><a href="Test_fit_svm_param_select.html">A presentation of parameters selection techniques for <tt>svm</tt>.</a><br></td>
+        </tr>
+        <tr class="demorow">
+            <td class="demopanel-thumbnail"><a href="Test_fit_svm_path.html"><img src="type_m-file.png"></a></td>
+            <td class="demopanel-description"><a href="Test_fit_svm_path.html">An illustration of the <tt>svm</tt> path.</a><br></td>
+        </tr>
+    </table>
+</p><h2>References<a name="6"></a></h2><p><ul style="list-style-type:none">
+  <li id="ref_osuna"><span style="color:#005fce;">Osuna et al.
+  (1997)</span>: Osuna E., Freund R., Girosi F., (1997) <i>Support vector
+  machines: Training and applications</i>.</li>
+  <li id="ref_vap"><span style="color:#005fce;">Vapnik (2000)</span>:
+  Vapnik V., (2000) <i>The nature of statistical learning theory</i>.
+  Springer</li>
+  <li id="ref_cha"><span style="color:#005fce;">Chapelle (2007)</span>:
+  Chapelle O., (2010) <i>Training a support vector machine in the
+  primal</i>. Neural Computation, 19(5)1155-1178 - <a
+  href="http://dx.doi.org/10.1162/neco.2007.19.5.1155">DOI</a></li>
+  <li id="ref_libsvm"><span style="color:#005fce;">Chang and Lin
+  (2011)</span>: Chang C.C., Lin C.J., (2011) <i>LIBSVM : a library for
+  support vector machines.</i> ACM Transactions on Intelligent Systems
+  and Technology, 2(3):1-27. <a
+  href="http://www.csie.ntu.edu.tw/~cjlin/libsvm">Software</a></li>
+</ul></p><p>Copyright &copy; 2015 Computational Optimal Design of Engineering Systems
+(CODES) Laboratory. University of Arizona.</p><p><table style="border: none">
+  <tr style="border: none">
+    <td style="border: none;padding-left: 0px;">
+      <a href ="http://codes.arizona.edu/"><img style="height: 50px;" src ="CODES_logo.png"></a>
+    </td><td style="border: none; vertical-align: middle;padding-left: 10px;">
+      <a href ="http://codes.arizona.edu/"><span style="font-weight:bold;font-family:Arial;font-size: 20px;color: #002147"><span style="color: #AB0520;">C</span>omputational <span style="color: #AB0520;">O</span>ptimal <span style="color: #AB0520;">D</span>esign of<br><span style="color: #AB0520;">E</span>ngineering <span style="color: #AB0520;">S</span>ystems</span></a>
+    </td><td style="border: none;padding-right: 0px;">
+      <a href = "http://www.arizona.edu/"><img style="height: 50px;" src = "AZlogo.png"></a>
+    </td>
+  </tr>
+</table></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% <CODES.html CODES> / <fit_main.html fit> / svm
+% _Train a Support Vector Machine_
+%
+% <html>
+%   <style type="text/css">
+%     span.string{color:#A020F0;font-family:monospace;}
+%     p{text-align: justify;}
+%   </style>
+% </html>
+%
+% <html><a id="syntax"></a></html>
+%% Syntax
+% * |svm=CODES.fit.svm(x,y)| builds an svm based on the training set
+% |(x,y)|.
+% * |svm=CODES.fit.svm(...,param,value)| uses a list of parameters
+% |param| and values |value| (_c.f._, <#params parameter table>).
+%
+% <html><a id="description"></a></html>
+%% Description
+% Support Vector Machine (SVM) is a machine learning classification tool.
+% Its core idea relies on the definition of an optimal decision function.
+% In the linear case, the decision function is a hyper-plane which is
+% defined through the following quadratic optimization problem:
+%
+% $$\begin{array}{rll}\mathop{\min}\limits_{\beta,b}&\frac{1}{2}||\beta||^2\\\textbf{s.t.}&1-l_i(\beta^T\mathbf{x}^{(i)}+b)\leq0&\forall i=\{1,\ldots,n\}\end{array}$$
+%
+% where $n$ is the number of training samples, and the optimal separating plane
+% is defined as $\beta^T\mathbf{x}+b=0$. The constant $b$ (sometimes referred to as
+% $\beta_0$) is called the bias, $\mathbf{x}^{(i)}$ is
+% the $i\textrm{\textsuperscript{th}}$ training sample, and $l^{(i)}$ the $i\textrm{\textsuperscript{th}}$ label.  As
+% per convention, labels $l^{(i)}$ derive from function values $y^{(i)}$
+% such that:
+%
+% $$l^{(i)}=\left\{\begin{array}{ll}+1&\textrm{if }y^{(i)}>0\\-1&\textrm{if }y^{(i)}\leq0\end{array}\right.$$
+% 
+% Note: in the case of a response $f$, and a threshold $f_0$, the
+% classification is performed on the sign of a limit state function $y$
+% defined as $y(x)=f(x)-f_0$  or  $y(x)=f_0-f(x)$.
+%
+% In the case of non-separable data, the optimization problem is infeasible
+% and needs to be relaxed. This is done through the introduction of slack
+% variables $\xi_i$:
+%
+% $$\begin{array}{rll}\mathop{\min}\limits_{\beta,b,\xi}&\frac{1}{2}||\beta||^2+\frac{C}{L}\displaystyle\sum_{i=1}^n\xi_i^L\\\textbf{s.t.}&1-l_i(\beta^T\mathbf{x}^{(i)}+b)-\xi_i\leq0&\forall i=\{1,\ldots,n\}\\&\xi_i\geq0&\forall i=\{1,\ldots,n\}\end{array}$$
+%
+% where $L$ is either 1 or 2 and represents the loss function used. In the
+% remainder of this help, $L=1$ (L1 SVM) is used but can be easily extended
+% to L2 SVM. Using Karush-Kuhn-Tucker conditions, one can show that:
+%
+% $$\left\{\begin{array}{rcl}0&=&\displaystyle\sum_{i=1}^n\alpha_il^{(i)}\\\beta&=&\displaystyle\sum_{i=1}^n\alpha_il^{(i)}\mathbf{x}^{(i)}\\\alpha_i&=&C-\mu_i\end{array}\right.$$
+%
+% where $\alpha_i$ and $\mu_i$ are the $i\textrm{\textsuperscript{th}}$
+% Lagrange multiplier associated to the first and second set of
+% constraints,respectively. This leads to the dual problem:
+%
+% $$\begin{array}{rll}\mathop{\max}\limits_{\alpha}&\displaystyle\sum_{i=1}^n\alpha_i-\frac{1}{2}\displaystyle\sum_{i=1}^n\displaystyle\sum_{j=1}^n\alpha_i\alpha_jl^{(i)}l^{(j)}\mathbf{x}^{(i)T}\mathbf{x}^{(j)}\\\textbf{s.t.}&0\leq\alpha_i\leq C&\forall i=\{1,\ldots,n\}\\&\displaystyle\sum_{i=1}^n\alpha_il^{(i)}=0\end{array}$$
+%
+% Finally, the so-called kernel trick consists in recognizing that the
+% scalar product $x^Ty$ could be replaced by a kernel function $K_\theta$
+% of parameter $\theta$ such that the dual problem becomes:
+%
+% $$\begin{array}{rll}\mathop{\max}\limits_{\alpha}&\displaystyle\sum_{i=1}^n\alpha_i-\frac{1}{2}\displaystyle\sum_{i=1}^n\displaystyle\sum_{j=1}^n\alpha_i\alpha_jl^{(i)}l^{(j)}K_\theta(\mathbf{x}^{(i)},\mathbf{x}^{(j)})\\\textbf{s.t.}&0\leq\alpha_i\leq C&\forall i=\{1,\ldots,n\}\\&\displaystyle\sum_{i=1}^n\alpha_il^{(i)}=0\end{array}$$
+%
+% For an in-depth discussion of Support Vector Machine and Machine
+% Learning, the interested reader is referred to <#ref_vap Vapnik (2000)>.
+%
+% Slack variables, bias, Lagrange multipliers, and indices of the support
+% vectors can be obtained using: |svm.xis|, |svm.bias|, |svm.alphas|, and
+% |svm.SVs|.
+%
+% <html><a id="kernels"></a></html>
+%
+% <html><h3>Kernels</h3></html>
+%
+% Two kernels are available:
+%
+% * Linear:
+%
+% $$K(x,y)=x^Ty$$
+%
+% * Gaussian:
+%
+% $$K_\theta(x,y)=\exp\left[\frac{||x-y||^2}{2\theta^2}\right]$$
+%
+% <html><a id="solvers"></a></html>
+%
+% <html><h3>Solvers</h3></html>
+%
+% Three solvers are implemented:
+%
+% * Primal (linear kernel only), uses |quadprog| to solve:
+%
+% $$\begin{array}{rll}\mathop{\min}\limits_{\beta,b,\xi}&\frac{1}{2}||\beta||^2+\frac{C}{L}\displaystyle\sum_{i=1}^n\xi_i^L\\\textbf{s.t.}&1-l_i(\beta^T\mathbf{x}^{(i)}+b)-\xi_i\leq0&\forall i=\{1,\ldots,n\}\\&\xi_i\geq0&\forall i=\{1,\ldots,n\}\end{array}$$
+%
+% Ideas to extend the primal solver can be found in <#ref_cha Chapelle
+% (2007)>.
+%
+% * Dual, uses |quadprog| to solve:
+% 
+% $$\begin{array}{rll}\textrm{If }L=1\ :\ \mathop{\max}\limits_{\alpha}&\displaystyle\sum_{i=1}^n\alpha_i-\frac{1}{2}\displaystyle\sum_{i=1}^n\displaystyle\sum_{j=1}^n\alpha_i\alpha_jl^{(i)}l^{(j)}K_\theta(\mathbf{x}^{(i)},\mathbf{x}^{(j)})\\\textbf{s.t.}&0\leq\alpha_i\leq C&\forall i=\{1,\ldots,n\}\\&\displaystyle\sum_{i=1}^n\alpha_il^{(i)}=0\end{array}$$
+%
+% $$\begin{array}{rll}\textrm{If }L=2\ :\ \mathop{\max}\limits_{\alpha}&\displaystyle\sum_{i=1}^n\alpha_i-\frac{1}{2}\displaystyle\sum_{i=1}^n\displaystyle\sum_{j=1}^n\alpha_i\alpha_jl^{(i)}l^{(j)}\left(K_\theta(\mathbf{x}^{(i)},\mathbf{x}^{(j)})+\frac{\delta_{ij}}{C}\right)\\\textbf{s.t.}&0\leq\alpha_i&\forall i=\{1,\ldots,n\}\\&\displaystyle\sum_{i=1}^n\alpha_il^{(i)}=0\end{array}$$
+%
+% * libSVM, presented in <#ref_libsvm Chang and Lin (2011)> uses an
+% extremly efficient SMO-type algorithm to solve the dual formulation.
+%
+% <html><a id="weights"></a></html>
+%
+% <html><h3>Weighted formulation</h3></html>
+%
+% <#ref_osuna Osuna et al. (1997)> and <#ref_vap Vapnik (2000)> introduced
+% different cost coefficients (i.e., weights) for the different classes in
+% the SVM formulation. The corresponding linear formulation is:
+%
+% $$\begin{array}{rl}\mathop{\min}\limits_{\mathbf{w},\mathbf{\xi},b}&\frac{1}{2} \|\mathbf{w}\|^2 + C^+ \sum_{i=1}^{N^+} \xi_i + C^- \sum_{i=1}^{N^-} \xi_i\\\textbf{s.t.}&y_i(\mathbf{w}\cdot \mathbf{x}_i - b) \ge 1 - \xi_i\\&\xi_i \ge 0 , i = 1,\dots,N\end{array}$$
+%
+% where $C^+$ and $C^-$ are cost coefficients for the +1 and -1 classes
+% respectively. $N^+$ and $N^-$ are the number of samples from +1 and -1
+% classes. The coefficients are typically chosen as <#ref_libsvm (Chang and
+% Lin, 2011)>:
+%
+% $$\begin{array}{r}C^+ = C \times w^+\\C^- = C \times w^-\end{array}$
+%
+% where $C$ is the common cost coefficient for both classes, $w^+$ and
+% $w^-$ are the weights for +1 and -1 class respectively. The weights are
+% typically chosen as:
+%
+% $$w^+ = 1$$
+%
+% $$w^- = \frac{N^+}{N^-}$$
+%
+% <html><a id="training"></a></html>
+%% Training Options
+% <html><table id="params" style="border: none">
+%   <tr>
+%     <th><span class="ms">param</span></th>
+%     <th><span class="ms">value</span></th>
+%     <th>Description</th>
+%   </tr>
+%   <tr>
+%     <td><span class="string">'scale'</span></td>
+%     <td>{<span class="string">'square'</span>}, <span class="string">'circle'</span>, <span class="string">'none'</span></td>
+%     <td>Define scaling method for the inputs (<i>c.f.</i>, <a href=#scaling>Scaling</a> for details)</td>
+%   </tr>
+%   <tr>
+%     <td><span class="string">'UseParallel'</span></td>
+%     <td>logical, {<tt>false</tt>}</td>
+%     <td>Switch to use parallel settings</td>
+%   </tr>
+%   <tr>
+%     <td><span class="string">'theta'</span></td>
+%     <td>numeric, { [ ] }</td>
+%     <td>Value for kernel parameter. If [ ], should be calibrated.</td>
+%   </tr>
+%   <tr>
+%     <td><span class="string">'kernel'</span></td>
+%     <td>{<span class="string">'gauss'</span>}, <span class="string">'lin'</span></td>
+%     <td>Kernel type, see <a href=#kernels>Kernels</a>.</td>
+%   </tr>
+%   <tr>
+%     <td><span class="string">'solver'</span></td>
+%     <td>{<span class="string">'libsvm'</span>}, <span class="string">'dual'</span>, <span class="string">'primal'</span></td>
+%     <td>Type of solver to use to solve the SVM optimization problem, see <a href=#solvers>Solvers</a>.</td>
+%   </tr>
+%   <tr>
+%     <td><span class="string">'loss'</span></td>
+%     <td>{1}, 2</td>
+%     <td>Loss function.</td>
+%   </tr>
+%   <tr>
+%     <td><span class="string">'C'</span></td>
+%     <td>positive numeric, { [ ] }</td>
+%     <td>Cost parameter. If [ ], should be calibrated.</td>
+%   </tr>
+%   <tr>
+%     <td><span class="string">'weight'</span></td>
+%     <td>logical, {<tt>false</tt>}</td>
+%     <td>If <tt>true</tt>, train weighted SVM, see <a href=#weights>Weighted formulation</a>.</td>
+%   </tr>
+%   <tr>
+%     <td><span class="string">'w_plus'</span></td>
+%     <td>numeric, {1}</td>
+%     <td>Weight for +1 samples. If default and <span class="string">'weight'</span> is <tt>true</tt>, weight computed based on sample imbalance.</td>
+%   </tr>
+%   <tr>
+%     <td><span class="string">'w_minus'</span></td>
+%     <td>numeric, {1}</td>
+%     <td>Weight for -1 samples. If default and <span class="string">'weight'</span> is <tt>true</tt>, weight computed based on sample imbalance.</td>
+%   </tr>
+%   <tr>
+%     <td><span class="string">'param_select'</span></td>
+%     <td><ul style="margin-bottom:0px;">
+%       <li>{<span class="string">'fast'</span>}</li>
+%       <li><span class="string">'loo'</span></li>
+%       <li><span class="string">'cv'</span></li>
+%       <li><span class="string">'chapelle'</span></li>
+%       <li><span class="string">'Nsv'</span></li>
+%       <li><span class="string">'loo_bal'</span></li>
+%       <li><span class="string">'cv_bal'</span></li>
+%       <li><span class="string">'chapelle_bal'</span></li>
+%       <li><span class="string">'Nsv_bal'</span></li>
+%       <li><span class="string">'auc'</span></li>
+%       <li><span class="string">'cv_auc'</span></li>
+%       <li><span class="string">'stiffest'</span></li>
+%     </ul></td>
+%     <td>Kernel parameter calibration strategy, see <a href=Test_fit_svm_param_select.html>svm (parameters selection)</a>. Kernel parameters are optimized such that they either minimize (maximize in the case of the AUC) the elected metric or satisfy some heuristic (<span class="string">'fast'</span> or <span class="string">'stiffest'</span>).</td>
+%   </tr>
+% </table></html>
+%
+% <html><a id="properties"></a></html>
+%
+% <html><a id="evaluation"></a></html>
+%% Evaluation and Post-Processing
+%
+% <html>
+% <link rel="stylesheet" type="text/css" href="demoindex.css"></link>
+%     <table id="demo_table" border="0" cellspacing="0" cellpadding="0" style="width:491px">
+%         <tr class="demorow">
+%             <td class="demopanel-thumbnail"><a href="svm_method.html"><img src="type_m-file.png"></a></td>
+%             <td class="demopanel-description"><a href="svm_method.html">Capabilities of an <tt>svm</tt> object.</a><br></td>
+%         </tr>
+%     </table>
+% </html>
+%
+% <html><a id="example"></a></html>
+%% Mini tutorials
+%
+% <html>
+% <link rel="stylesheet" type="text/css" href="demoindex.css"></link>
+%     <table id="demo_table" border="0" cellspacing="0" cellpadding="0" style="width:491px">
+%         <tr class="demorow">
+%             <td class="demopanel-thumbnail"><a href="Test_fit_svm.html"><img src="type_m-file.png"></a></td>
+%             <td class="demopanel-description"><a href="Test_fit_svm.html">A mini tutorial of the capabilities of the <tt>svm</tt> class.</a><br></td>
+%         </tr>
+%         <tr class="demorow">
+%             <td class="demopanel-thumbnail"><a href="Test_fit_svm_param_select.html"><img src="type_m-file.png"></a></td>
+%             <td class="demopanel-description"><a href="Test_fit_svm_param_select.html">A presentation of parameters selection techniques for <tt>svm</tt>.</a><br></td>
+%         </tr>
+%         <tr class="demorow">
+%             <td class="demopanel-thumbnail"><a href="Test_fit_svm_path.html"><img src="type_m-file.png"></a></td>
+%             <td class="demopanel-description"><a href="Test_fit_svm_path.html">An illustration of the <tt>svm</tt> path.</a><br></td>
+%         </tr>
+%     </table>
+% </html>
+%
+%% References
+% <html><ul style="list-style-type:none">
+%   <li id="ref_osuna"><span style="color:#005fce;">Osuna et al.
+%   (1997)</span>: Osuna E., Freund R., Girosi F., (1997) <i>Support vector
+%   machines: Training and applications</i>.</li>
+%   <li id="ref_vap"><span style="color:#005fce;">Vapnik (2000)</span>:
+%   Vapnik V., (2000) <i>The nature of statistical learning theory</i>.
+%   Springer</li> 
+%   <li id="ref_cha"><span style="color:#005fce;">Chapelle (2007)</span>:
+%   Chapelle O., (2010) <i>Training a support vector machine in the
+%   primal</i>. Neural Computation, 19(5)1155-1178 - <a
+%   href="http://dx.doi.org/10.1162/neco.2007.19.5.1155">DOI</a></li>
+%   <li id="ref_libsvm"><span style="color:#005fce;">Chang and Lin
+%   (2011)</span>: Chang C.C., Lin C.J., (2011) <i>LIBSVM : a library for
+%   support vector machines.</i> ACM Transactions on Intelligent Systems
+%   and Technology, 2(3):1-27. <a
+%   href="http://www.csie.ntu.edu.tw/~cjlin/libsvm">Software</a></li>
+% </ul></html>
+%
+%%
+%%
+% <html>Copyright &copy; 2015 Computational Optimal Design of Engineering Systems
+% (CODES) Laboratory. University of Arizona.</html>
+%%
+%
+% <html><table style="border: none">
+%   <tr style="border: none">
+%     <td style="border: none;padding-left: 0px;">
+%       <a href ="http://codes.arizona.edu/"><img style="height: 50px;" src ="CODES_logo.png"></a>
+%     </td><td style="border: none; vertical-align: middle;padding-left: 10px;">
+%       <a href ="http://codes.arizona.edu/"><span style="font-weight:bold;font-family:Arial;font-size: 20px;color: #002147"><span style="color: #AB0520;">C</span>omputational <span style="color: #AB0520;">O</span>ptimal <span style="color: #AB0520;">D</span>esign of<br><span style="color: #AB0520;">E</span>ngineering <span style="color: #AB0520;">S</span>ystems</span></a>
+%     </td><td style="border: none;padding-right: 0px;">
+%       <a href = "http://www.arizona.edu/"><img style="height: 50px;" src = "AZlogo.png"></a>
+%     </td>
+%   </tr>
+% </table></html>
+
+##### SOURCE END #####
+--></body></html>

@@ -58,6 +58,11 @@ h.XLabel.String = '\sigma_{u} (m/s)';
 h.YLabel.String = '\sigma_{w} (m/s)';
 h.ZLabel.String = 'Prob. density';
 
+trapz(log(y2),trapz(log(y1),fturb_joint,2),1)
+
+trapz(y2,trapz(y1,fturb_joint,2),1)
+
+
 
 % Joint pdf of all environmental parameters
 
@@ -112,13 +117,13 @@ for i = 1:length(Uint)-1
     for j = 1:length(sigmauint)-1
         
         for k = 1:length(sigmawint)-1
-           
+            
             int(i,j,k) = LT_int( Uav,sigmauav,sigmawav,resp );
             
         end
     end
 end
-    
+
 
 
 %% approximate the short term response with a response surface
@@ -142,7 +147,7 @@ for i = 1:length(Uvals)
         for k = 1:length(sigmawvals)
             
             wind_input.sigmaw = sigmawvals(k);
-
+            
             [ST_resp_std(i,j,k), ST_resp_stddot(i,j,k)] = short_term_response( settings,wind_input );
             
         end
@@ -175,13 +180,13 @@ tbldot = table(X,Y,Z,real(ST_resp_stddot_vec),'VariableNames',{'U','sigma_u','si
 lmSTD = fitlm([X Y Z],real(ST_resp_std_vec) ,'quadratic');
 lmSTDdot = fitlm([X Y Z],real(ST_resp_stddot_vec) ,'quadratic');
 
- [ypred,yci] = predict(lm,[50 8 4]);
+[ypred,yci] = predict(lm,[50 8 4]);
 
 save('RSmodel','lmSTD','lmSTDdot');
 
 
 
-%%
+%% full long term with response surface
 
 
 Uvals = 1:1:40;
@@ -196,14 +201,79 @@ for i = 1:length(sz)
     product = product*sz(i);
 end
 
-X = reshape(X,[product,1]);
-Y = reshape(Y,[product,1]);
-Z = reshape(Z,[product,1]);
+% X = reshape(X,[product,1]);
+% Y = reshape(Y,[product,1]);
+% Z = reshape(Z,[product,1]);
 
 resp = 0.8;
 LTfun = @(x,y,z) LTint_RSM(x,y,z,resp,lmSTD,lmSTDdot);
 
 ints = arrayfun(LTfun, X,Y,Z);
+
+out = trapz(Uvals,trapz(sigmauvals,trapz(sigmawvals,ints,3),2),1);
+
+
+
+
+
+
+%% get the CDF of the long term extreme
+
+Uvals = 1:1:40;
+sigmauvals = 0.1:0.5:10;
+sigmawvals = 0.1:0.5:6;
+
+sigma_dash(1) = 0.3159;
+sigma_dash(2) = 0.3021;
+rhoY = 0.8148;
+
+[X,Y,Z] = meshgrid(sigmauvals,Uvals,sigmawvals);
+
+y_cell = cellfun(@(x,y) [x,y], num2cell(X), num2cell(Z),'UniformOutput',0);
+
+mu_dash_cell = cellfun(@(x,y) [x,y], num2cell(0.122+0.039*Y), num2cell(-0.657+0.03*Y),'UniformOutput',0);
+U_cell = num2cell(Y);
+
+fun_full_env = @(y_fun,mu_dash_fun,u_fun) joint_pdf_turbulence( y_fun, mu_dash_fun, sigma_dash, rhoY )*lognpdf(u_fun,1.0967,0.4894);
+
+joint_full_env = cellfun(fun_full_env, y_cell,mu_dash_cell, U_cell);
+
+
+resp_ini = 0.001:0.1:0.5;
+
+for i = 1:length(resp)
+    LTfun = @(x,y,z,v) LTint_RSM(x,y,z,resp(i),lmSTD,lmSTDdot,v);
+    
+    [ Flong(i) ] = long_term_CDF( LTfun,Uvals,sigmauvals,sigmawvals,X,Y,Z,joint_full_env );
+    
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

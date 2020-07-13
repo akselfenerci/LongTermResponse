@@ -1,0 +1,307 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Examples / Adaptive sampling / cvt</title><meta name="generator" content="MATLAB 8.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-06-23"><meta name="DC.source" content="Test_method_cvt.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1><a href="demo.html">Examples</a> / <a href="demo_method.html">Adaptive sampling</a> / cvt</h1><!--introduction--><p>This file is a complete demo of the capability of the <tt>cvt</tt> function from the CODES toolbox.</p><p>
+  <style type="text/css">
+    span.string{color:#A020F0;font-family:monospace;}
+    p{text-align: justify;}
+  </style>
+</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Documentation</a></li><li><a href="#2">Set rng</a></li><li><a href="#3">Simple example</a></li><li><a href="#4">Restricted DOE</a></li><li><a href="#6">Distribution tailored DOE</a></li></ul></div><h2>Documentation<a name="1"></a></h2><p>The documentation for the <tt>cvt</tt> function can be found <a href="cvt.html">here</a>.</p><h2>Set rng<a name="2"></a></h2><p>Set random number generator seed:</p><pre class="codeinput">rng(0)
+</pre><h2>Simple example<a name="3"></a></h2><p>Build a simple CVT DOE within a square of side length 10 centered on the origin:</p><pre class="codeinput">DOE=CODES.sampling.cvt(100,2,<span class="string">'lb'</span>,[-5 -5],<span class="string">'ub'</span>,[5 5]);
+
+figure(<span class="string">'Position'</span>,[200 200 500 500])
+plot(DOE(:,1),DOE(:,2),<span class="string">'bo'</span>)
+axis <span class="string">square</span>
+axis([-5 5 -5 5])
+</pre><img vspace="5" hspace="5" src="Test_method_cvt_01.png" alt=""> <h2>Restricted DOE<a name="4"></a></h2><p>Observe the previous DOE overlayed with a normal distribution:</p><pre class="codeinput">JPDF=@(x)mvnpdf(x,[0 0],[1 0;0 1]);
+[X,Y]=meshgrid(linspace(-5,5,100));
+Z=reshape(JPDF([X(:) Y(:)]),100,100);
+
+figure(<span class="string">'Position'</span>,[200 200 500 500])
+contour(X,Y,Z,50)
+hold <span class="string">on</span>
+plot(DOE(:,1),DOE(:,2),<span class="string">'b.'</span>)
+axis <span class="string">square</span>
+axis([-5 5 -5 5])
+</pre><img vspace="5" hspace="5" src="Test_method_cvt_02.png" alt=""> <p>A better DOE would be to have CVT samples restricted within a circle:</p><pre class="codeinput">DOE=CODES.sampling.cvt(100,2,<span class="string">'lb'</span>,[-5 -5],<span class="string">'ub'</span>,[5 5],<span class="string">'region'</span>,@(x)5-pdist2(x,[0 0]));
+
+figure(<span class="string">'Position'</span>,[200 200 500 500])
+contour(X,Y,Z,50)
+hold <span class="string">on</span>
+plot(DOE(:,1),DOE(:,2),<span class="string">'b.'</span>)
+axis <span class="string">square</span>
+axis([-5 5 -5 5])
+</pre><pre class="codeoutput">Sum of square change at iteration 1: 4.837e-03
+Sum of square change at iteration 2: 2.711e-03
+Sum of square change at iteration 3: 1.701e-03; Predicted relative change : 2.260e-01
+Sum of square change at iteration 4: 9.493e-04; Predicted relative change : 2.083e-01
+Sum of square change at iteration 5: 6.000e-04; Predicted relative change : 1.363e-01
+Sum of square change at iteration 6: 3.923e-04; Predicted relative change : 8.108e-02
+Sum of square change at iteration 7: 2.986e-04; Predicted relative change : 1.211e-25
+Sum of square change at iteration 8: 2.412e-04; Predicted relative change : 6.006e-14
+Sum of square change at iteration 9: 1.981e-04; Predicted relative change : 3.152e-58
+</pre><img vspace="5" hspace="5" src="Test_method_cvt_03.png" alt=""> <h2>Distribution tailored DOE<a name="6"></a></h2><p>The previous example relied on previous knowledge for the definition of the <i>region</i>. Another idea is to use isovalues of the target distribution as the <i>region</i> boundary. For example, consider a correlated Gaussian example as follows:</p><pre class="codeinput">JPDF=@(x)mvnpdf(x,[0 0],[1 0.7;0.7 1]);
+ndummies=mvnrnd([0 0],[1 0.7;0.7 1],1e5);
+[X,Y]=meshgrid(linspace(-5,5,100));
+Z=reshape(JPDF([X(:) Y(:)]),100,100);
+
+tic;
+DOE=CODES.sampling.cvt(100,2,<span class="string">'lb'</span>,[-5 -5],<span class="string">'ub'</span>,[5 5],<span class="keyword">...</span>
+    <span class="string">'dummies'</span>,ndummies,<span class="string">'display'</span>,false);
+disp([<span class="string">'Time to find CVT with prescribed dummies : '</span> CODES.common.time(toc)])
+tic;
+DOE1=CODES.sampling.cvt(100,2,<span class="string">'lb'</span>,[-5 -5],<span class="string">'ub'</span>,[5 5],<span class="keyword">...</span>
+    <span class="string">'dummies'</span>,ndummies,<span class="string">'kmeans'</span>,true);
+disp([<span class="string">'Time to find CVT with prescribed dummies and matlab built-in kmeans : '</span> CODES.common.time(toc)])
+tic;
+DOE2=CODES.sampling.cvt(100,2,<span class="string">'lb'</span>,[-5 -5],<span class="string">'ub'</span>,[5 5],<span class="keyword">...</span>
+    <span class="string">'region'</span>,@(x)JPDF(x)-JPDF([4 4]),<span class="string">'display'</span>,false);
+disp([<span class="string">'Time to find CVT with shuffled Halton dummies : '</span> CODES.common.time(toc)])
+tic;
+DOE3=CODES.sampling.cvt(100,2,<span class="string">'lb'</span>,[-5 -5],<span class="string">'ub'</span>,[5 5],<span class="keyword">...</span>
+    <span class="string">'region'</span>,@(x)JPDF(x)-JPDF([4 4]),<span class="string">'kmeans'</span>,true);
+disp([<span class="string">'Time to find CVT with matlab built-in kmeans : '</span> CODES.common.time(toc)])
+
+figure(<span class="string">'Position'</span>,[200 200 500 500])
+contour(X,Y,Z,50)
+hold <span class="string">on</span>
+plot(DOE(:,1),DOE(:,2),<span class="string">'b.'</span>)
+axis <span class="string">square</span>
+axis([-5 5 -5 5])
+
+figure(<span class="string">'Position'</span>,[200 200 500 500])
+contour(X,Y,Z,50)
+hold <span class="string">on</span>
+plot(DOE1(:,1),DOE1(:,2),<span class="string">'b.'</span>)
+axis <span class="string">square</span>
+axis([-5 5 -5 5])
+
+figure(<span class="string">'Position'</span>,[200 200 500 500])
+contour(X,Y,Z,50)
+hold <span class="string">on</span>
+plot(DOE2(:,1),DOE2(:,2),<span class="string">'b.'</span>)
+axis <span class="string">square</span>
+axis([-5 5 -5 5])
+
+figure(<span class="string">'Position'</span>,[200 200 500 500])
+contour(X,Y,Z,50)
+hold <span class="string">on</span>
+plot(DOE3(:,1),DOE3(:,2),<span class="string">'b.'</span>)
+axis <span class="string">square</span>
+axis([-5 5 -5 5])
+</pre><pre class="codeoutput">Time to find CVT with prescribed dummies : 4s
+Warning: Failed to converge in 100 iterations. 
+Time to find CVT with prescribed dummies and matlab built-in kmeans : 11s
+Time to find CVT with shuffled Halton dummies : 5s
+Warning: Failed to converge in 100 iterations. 
+Time to find CVT with matlab built-in kmeans : 12s
+</pre><img vspace="5" hspace="5" src="Test_method_cvt_04.png" alt=""> <img vspace="5" hspace="5" src="Test_method_cvt_05.png" alt=""> <img vspace="5" hspace="5" src="Test_method_cvt_06.png" alt=""> <img vspace="5" hspace="5" src="Test_method_cvt_07.png" alt=""> <p>Copyright &copy; 2015 Computational Optimal Design of Engineering Systems
+(CODES) Laboratory. University of Arizona.</p><p><table style="border: none">
+  <tr style="border: none">
+    <td style="border: none;padding-left: 0px;">
+      <a href ="http://codes.arizona.edu/"><img style="height: 50px;" src ="CODES_logo.png"></a>
+    </td><td style="border: none; vertical-align: middle;padding-left: 10px;">
+      <a href ="http://codes.arizona.edu/"><span style="font-weight:bold;font-family:Arial;font-size: 20px;color: #002147"><span style="color: #AB0520;">C</span>omputational <span style="color: #AB0520;">O</span>ptimal <span style="color: #AB0520;">D</span>esign of<br><span style="color: #AB0520;">E</span>ngineering <span style="color: #AB0520;">S</span>ystems</span></a>
+    </td><td style="border: none;padding-right: 0px;">
+      <a href = "http://www.arizona.edu/"><img style="height: 50px;" src = "AZlogo.png"></a>
+    </td>
+  </tr>
+</table></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% <demo.html Examples> / <demo_method.html Adaptive sampling> / cvt
+% This file is a complete demo of the capability of the |cvt| function from
+% the CODES toolbox.
+%
+% <html>
+%   <style type="text/css">
+%     span.string{color:#A020F0;font-family:monospace;}
+%     p{text-align: justify;}
+%   </style>
+% </html>
+%
+%% Documentation
+% The documentation for the |cvt| function can be found
+% <cvt.html here>.
+%
+%% Set rng
+% Set random number generator seed:
+rng(0)
+
+%% Simple example
+% Build a simple CVT DOE within a square of side length 10 centered on the
+% origin:
+
+DOE=CODES.sampling.cvt(100,2,'lb',[-5 -5],'ub',[5 5]);
+
+figure('Position',[200 200 500 500])
+plot(DOE(:,1),DOE(:,2),'bo')
+axis square
+axis([-5 5 -5 5])
+
+%% Restricted DOE
+% Observe the previous DOE overlayed with a normal distribution:
+
+JPDF=@(x)mvnpdf(x,[0 0],[1 0;0 1]);
+[X,Y]=meshgrid(linspace(-5,5,100));
+Z=reshape(JPDF([X(:) Y(:)]),100,100);
+
+figure('Position',[200 200 500 500])
+contour(X,Y,Z,50)
+hold on
+plot(DOE(:,1),DOE(:,2),'b.')
+axis square
+axis([-5 5 -5 5])
+
+%%
+% A better DOE would be to have CVT samples restricted within a circle:
+
+DOE=CODES.sampling.cvt(100,2,'lb',[-5 -5],'ub',[5 5],'region',@(x)5-pdist2(x,[0 0]));
+
+figure('Position',[200 200 500 500])
+contour(X,Y,Z,50)
+hold on
+plot(DOE(:,1),DOE(:,2),'b.')
+axis square
+axis([-5 5 -5 5])
+
+%% Distribution tailored DOE
+% The previous example relied on previous knowledge for the definition of
+% the _region_. Another idea is to use isovalues of the target distribution
+% as the _region_ boundary. For example, consider a correlated Gaussian example
+% as follows:
+
+JPDF=@(x)mvnpdf(x,[0 0],[1 0.7;0.7 1]);
+ndummies=mvnrnd([0 0],[1 0.7;0.7 1],1e5);
+[X,Y]=meshgrid(linspace(-5,5,100));
+Z=reshape(JPDF([X(:) Y(:)]),100,100);
+
+tic;
+DOE=CODES.sampling.cvt(100,2,'lb',[-5 -5],'ub',[5 5],...
+    'dummies',ndummies,'display',false);
+disp(['Time to find CVT with prescribed dummies : ' CODES.common.time(toc)])
+tic;
+DOE1=CODES.sampling.cvt(100,2,'lb',[-5 -5],'ub',[5 5],...
+    'dummies',ndummies,'kmeans',true);
+disp(['Time to find CVT with prescribed dummies and matlab built-in kmeans : ' CODES.common.time(toc)])
+tic;
+DOE2=CODES.sampling.cvt(100,2,'lb',[-5 -5],'ub',[5 5],...
+    'region',@(x)JPDF(x)-JPDF([4 4]),'display',false);
+disp(['Time to find CVT with shuffled Halton dummies : ' CODES.common.time(toc)])
+tic;
+DOE3=CODES.sampling.cvt(100,2,'lb',[-5 -5],'ub',[5 5],...
+    'region',@(x)JPDF(x)-JPDF([4 4]),'kmeans',true);
+disp(['Time to find CVT with matlab built-in kmeans : ' CODES.common.time(toc)])
+
+figure('Position',[200 200 500 500])
+contour(X,Y,Z,50)
+hold on
+plot(DOE(:,1),DOE(:,2),'b.')
+axis square
+axis([-5 5 -5 5])
+
+figure('Position',[200 200 500 500])
+contour(X,Y,Z,50)
+hold on
+plot(DOE1(:,1),DOE1(:,2),'b.')
+axis square
+axis([-5 5 -5 5])
+
+figure('Position',[200 200 500 500])
+contour(X,Y,Z,50)
+hold on
+plot(DOE2(:,1),DOE2(:,2),'b.')
+axis square
+axis([-5 5 -5 5])
+
+figure('Position',[200 200 500 500])
+contour(X,Y,Z,50)
+hold on
+plot(DOE3(:,1),DOE3(:,2),'b.')
+axis square
+axis([-5 5 -5 5])
+
+%%
+%%
+% <html>Copyright &copy; 2015 Computational Optimal Design of Engineering Systems
+% (CODES) Laboratory. University of Arizona.</html>
+%%
+%
+% <html><table style="border: none">
+%   <tr style="border: none">
+%     <td style="border: none;padding-left: 0px;">
+%       <a href ="http://codes.arizona.edu/"><img style="height: 50px;" src ="CODES_logo.png"></a>
+%     </td><td style="border: none; vertical-align: middle;padding-left: 10px;">
+%       <a href ="http://codes.arizona.edu/"><span style="font-weight:bold;font-family:Arial;font-size: 20px;color: #002147"><span style="color: #AB0520;">C</span>omputational <span style="color: #AB0520;">O</span>ptimal <span style="color: #AB0520;">D</span>esign of<br><span style="color: #AB0520;">E</span>ngineering <span style="color: #AB0520;">S</span>ystems</span></a>
+%     </td><td style="border: none;padding-right: 0px;">
+%       <a href = "http://www.arizona.edu/"><img style="height: 50px;" src = "AZlogo.png"></a>
+%     </td>
+%   </tr>
+% </table></html>
+
+##### SOURCE END #####
+--></body></html>

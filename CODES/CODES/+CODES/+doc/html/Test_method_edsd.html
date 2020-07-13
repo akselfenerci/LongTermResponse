@@ -1,0 +1,314 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Examples / Adaptive sampling / edsd</title><meta name="generator" content="MATLAB 8.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-06-23"><meta name="DC.source" content="Test_method_edsd.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1><a href="demo.html">Examples</a> / <a href="demo_method.html">Adaptive sampling</a> / edsd</h1><!--introduction--><p>This file is a complete demo of the capability of the |edsd|function from the CODES toolbox.</p><p>
+  <style type="text/css">
+    span.string{color:#A020F0;font-family:monospace;}
+    p{text-align: justify;}
+  </style>
+</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Documentation</a></li><li><a href="#2">Set rng</a></li><li><a href="#3">Simple example</a></li><li><a href="#7">Obtain classification error statistics</a></li><li><a href="#8">Plot functions</a></li><li><a href="#9">Obtain extra outputs from the function</a></li><li><a href="#10">References</a></li></ul></div><h2>Documentation<a name="1"></a></h2><p>The documentation for the <tt>edsd</tt> function can be found <a href="edsd.html">here</a>.</p><h2>Set rng<a name="2"></a></h2><p>Set random number generator seed:</p><pre class="codeinput">rng(0)
+</pre><h2>Simple example<a name="3"></a></h2><p>Define a simple sinusoidal problem:</p><pre class="codeinput">f=@(x)x(:,2)-sin(10*x(:,1))/4-0.5;
+x=CODES.sampling.cvt(10,2);
+y=f(x);
+</pre><p>Train an SVM and perform edsd while watching the convergence plot:</p><pre class="codeinput">svm=CODES.fit.svm(x,y,<span class="string">'UseParallel'</span>,true);
+svm_col=CODES.sampling.edsd(f,svm,[0 0],[1 1],<span class="string">'iter_max'</span>,20,<span class="string">'plot_conv'</span>,true,<span class="string">'display_edsd'</span>,false);
+</pre><img vspace="5" hspace="5" src="Test_method_edsd_01.png" alt=""> <p>Plot first and last contour:</p><pre class="codeinput">[X,Y]=meshgrid(linspace(0,1,100));
+Z=reshape(f([X(:) Y(:)]),100,100);
+
+figure(<span class="string">'Position'</span>,[200 200 500 500])
+contour(X,Y,Z,[0 0],<span class="string">'r'</span>)
+hold <span class="string">on</span>
+svm_col{1}.isoplot(<span class="string">'lb'</span>,[0 0],<span class="string">'ub'</span>,[1 1],<span class="string">'prev_leg'</span>,{<span class="string">'True LS'</span>})
+axis <span class="string">square</span>
+
+figure(<span class="string">'Position'</span>,[200 200 500 500])
+contour(X,Y,Z,[0 0],<span class="string">'r'</span>)
+hold <span class="string">on</span>
+svm_col{end}.isoplot(<span class="string">'lb'</span>,[0 0],<span class="string">'ub'</span>,[1 1],<span class="string">'prev_leg'</span>,{<span class="string">'True LS'</span>})
+axis <span class="string">square</span>
+</pre><img vspace="5" hspace="5" src="Test_method_edsd_02.png" alt=""> <img vspace="5" hspace="5" src="Test_method_edsd_03.png" alt=""> <p>
+<p><b>A video of this sequential update can be found <a
+href="matlab:file=strcat(fileparts(which('CODES.install')),'/+doc/html/Test_method_edsd_movie.mp4');disp(file);web(file,'-browser');">here</a>.
+</b></p>
+</p><h2>Obtain classification error statistics<a name="7"></a></h2><p>Compare the relative change of class, used as a convergence metric in <a href="#ref_bas">Basudhar and Missoum (2008)</a>, to the generalization error:</p><pre class="codeinput">error_gen=zeros(size(svm_col,1),1);
+class_change=zeros(size(svm_col,1)-1,1);
+
+<span class="keyword">for</span> i=1:size(svm_col,1)
+    error_gen(i,:)=svm_col{i}.me([X(:) Y(:)],Z(:));
+    <span class="keyword">if</span> i&gt;1
+        class_change(i-1,:)=svm_col{i}.class_change(svm_col{i-1},[X(:) Y(:)]);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+figure(<span class="string">'Position'</span>,[200 200 500 500])
+plot(1:size(svm_col,1),error_gen(:,1),<span class="string">'b-'</span>)
+hold <span class="string">on</span>
+plot(2:size(svm_col,1),class_change(:,1),<span class="string">'r-'</span>)
+plot(2:size(svm_col,1),abs(diff(error_gen(:,1))),<span class="string">'g-'</span>)
+legend(<span class="string">'Generalization error'</span>,<span class="string">'Class change'</span>,<span class="string">'Absolute change in generalization error'</span>)
+</pre><img vspace="5" hspace="5" src="Test_method_edsd_04.png" alt=""> <h2>Plot functions<a name="8"></a></h2><p>Perform a simple EDSD and plot AUC on a test set:</p><pre class="codeinput">f=@(x)x(:,2)-sin(10*x(:,1))/4-0.5;
+x=CODES.sampling.cvt(10,2);
+y=f(x);
+
+x_t=rand(1e4,2);
+y_t=f(x_t);
+
+plot_auc=@(svm,iter)plot(iter,svm.auc(x_t,y_t),<span class="string">'bs'</span>);
+
+svm=CODES.fit.svm(x,y,<span class="string">'UseParallel'</span>,true);
+[~]=CODES.sampling.edsd(f,svm,[0 0],[1 1],<span class="string">'iter_max'</span>,5,<span class="string">'plot_conv'</span>,true,<span class="string">'plotfcn'</span>,plot_auc);
+</pre><pre class="codeoutput">EDSD: iteration 1 out of 5 is done
+EDSD: iteration 2 out of 5 is done
+EDSD: iteration 3 out of 5 is done
+EDSD: iteration 4 out of 5 is done
+EDSD: iteration 5 out of 5 is done
+EDSD: Stopped because maximum number of iteration was reached
+</pre><img vspace="5" hspace="5" src="Test_method_edsd_05.png" alt=""> <img vspace="5" hspace="5" src="Test_method_edsd_06.png" alt=""> <h2>Obtain extra outputs from the function<a name="9"></a></h2><p>Consider a function that returns other information than just the performance. For example, consider a dummy function returning 3 random numbers for each sample calculated.</p><pre class="codeinput">f=@(x)deal(x(:,2)-sin(10*x(:,1))/4-0.5,num2cell(rand(size(x,1),3)));
+x=CODES.sampling.cvt(10,2);
+[y,extra_outputs]=f(x);
+
+svm=CODES.fit.svm(x,y,<span class="string">'UseParallel'</span>,true);
+[svm_col,extras]=CODES.sampling.edsd(f,svm,[0 0],[1 1],<span class="string">'iter_max'</span>,5,<span class="string">'extra_output'</span>,true);
+
+disp([svm_col{end}.X [cell2mat(extra_outputs);cell2mat(extras)]])
+</pre><pre class="codeoutput">EDSD: iteration 1 out of 5 is done
+EDSD: iteration 2 out of 5 is done
+EDSD: iteration 3 out of 5 is done
+EDSD: iteration 4 out of 5 is done
+EDSD: iteration 5 out of 5 is done
+EDSD: Stopped because maximum number of iteration was reached
+    0.1176    0.1648    0.8440    0.3873    0.1000
+    0.5469    0.4778    0.5728    0.4732    0.1202
+    0.4615    0.8109    0.5479    0.9344    0.3501
+    0.8679    0.1976    0.1869    0.3405    0.5470
+    0.1765    0.5094    0.2816    0.1760    0.1172
+    0.8050    0.8568    0.5348    0.3591    0.4756
+    0.3577    0.1945    0.9662    0.8280    0.1733
+    0.8519    0.5529    0.1612    0.1190    0.2818
+    0.1510    0.8399    0.4978    0.1914    0.5873
+    0.6110    0.1414    0.2211    0.3812    0.3221
+    0.3560    0.4057    0.3206    0.6285    0.2456
+    0.7032    0.3374    0.7859    0.4738    0.7413
+   -0.0000    0.9296    0.7991    0.9546    0.2973
+    0.1404    0.6734    0.9947    0.3241    0.0340
+    0.9032    1.0000    0.8030    0.9237    0.7396
+
+</pre><h2>References<a name="10"></a></h2><p><ul style="list-style-type:none">
+  <li id="ref_bas"><span style="color:#005fce;">Basudhar and Missoum
+  (2008)</span>: Basudhar A., Missoum S., (2008) <i>Adaptive explicit
+  decision functions for probabilistic design and optimization using
+  support vector machines</i>. Computers &amp; Structures
+  86(19):1904-1917 - <a
+  href="http://dx.doi.org/10.1016/j.compstruc.2008.02.008">DOI</a></li>
+</ul></p><p>Copyright &copy; 2015 Computational Optimal Design of Engineering Systems
+(CODES) Laboratory. University of Arizona.</p><p><table style="border: none">
+  <tr style="border: none">
+    <td style="border: none;padding-left: 0px;">
+      <a href ="http://codes.arizona.edu/"><img style="height: 50px;" src ="CODES_logo.png"></a>
+    </td><td style="border: none; vertical-align: middle;padding-left: 10px;">
+      <a href ="http://codes.arizona.edu/"><span style="font-weight:bold;font-family:Arial;font-size: 20px;color: #002147"><span style="color: #AB0520;">C</span>omputational <span style="color: #AB0520;">O</span>ptimal <span style="color: #AB0520;">D</span>esign of<br><span style="color: #AB0520;">E</span>ngineering <span style="color: #AB0520;">S</span>ystems</span></a>
+    </td><td style="border: none;padding-right: 0px;">
+      <a href = "http://www.arizona.edu/"><img style="height: 50px;" src = "AZlogo.png"></a>
+    </td>
+  </tr>
+</table></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% <demo.html Examples> / <demo_method.html Adaptive sampling> / edsd
+% This file is a complete demo of the capability of the |edsd|function from
+% the CODES toolbox.
+%
+% <html>
+%   <style type="text/css">
+%     span.string{color:#A020F0;font-family:monospace;}
+%     p{text-align: justify;}
+%   </style>
+% </html>
+%
+%% Documentation
+% The documentation for the |edsd| function can be found <edsd.html here>.
+%
+%% Set rng
+% Set random number generator seed:
+rng(0)
+
+%% Simple example
+% Define a simple sinusoidal problem:
+
+f=@(x)x(:,2)-sin(10*x(:,1))/4-0.5;
+x=CODES.sampling.cvt(10,2);
+y=f(x);
+
+%%
+% Train an SVM and perform edsd while watching the convergence plot:
+
+svm=CODES.fit.svm(x,y,'UseParallel',true);
+svm_col=CODES.sampling.edsd(f,svm,[0 0],[1 1],'iter_max',20,'plot_conv',true,'display_edsd',false);
+
+%%
+% Plot first and last contour:
+
+[X,Y]=meshgrid(linspace(0,1,100));
+Z=reshape(f([X(:) Y(:)]),100,100);
+
+figure('Position',[200 200 500 500])
+contour(X,Y,Z,[0 0],'r')
+hold on
+svm_col{1}.isoplot('lb',[0 0],'ub',[1 1],'prev_leg',{'True LS'})
+axis square
+
+figure('Position',[200 200 500 500])
+contour(X,Y,Z,[0 0],'r')
+hold on
+svm_col{end}.isoplot('lb',[0 0],'ub',[1 1],'prev_leg',{'True LS'})
+axis square
+
+%%
+% <html>
+% <p><b>A video of this sequential update can be found <a
+% href="matlab:file=strcat(fileparts(which('CODES.install')),'/+doc/html/Test_method_edsd_movie.mp4');disp(file);web(file,'-browser');">here</a>.
+% </b></p>
+% </html>
+%% Obtain classification error statistics
+% Compare the relative change of class, used as a convergence metric in
+% <#ref_bas Basudhar and Missoum (2008)>, to the generalization
+% error:
+
+error_gen=zeros(size(svm_col,1),1);
+class_change=zeros(size(svm_col,1)-1,1);
+
+for i=1:size(svm_col,1)
+    error_gen(i,:)=svm_col{i}.me([X(:) Y(:)],Z(:));
+    if i>1
+        class_change(i-1,:)=svm_col{i}.class_change(svm_col{i-1},[X(:) Y(:)]);
+    end
+end
+
+figure('Position',[200 200 500 500])
+plot(1:size(svm_col,1),error_gen(:,1),'b-')
+hold on
+plot(2:size(svm_col,1),class_change(:,1),'r-')
+plot(2:size(svm_col,1),abs(diff(error_gen(:,1))),'g-')
+legend('Generalization error','Class change','Absolute change in generalization error')
+
+%% Plot functions
+% Perform a simple EDSD and plot AUC on a test set:
+f=@(x)x(:,2)-sin(10*x(:,1))/4-0.5;
+x=CODES.sampling.cvt(10,2);
+y=f(x);
+
+x_t=rand(1e4,2);
+y_t=f(x_t);
+
+plot_auc=@(svm,iter)plot(iter,svm.auc(x_t,y_t),'bs');
+
+svm=CODES.fit.svm(x,y,'UseParallel',true);
+[~]=CODES.sampling.edsd(f,svm,[0 0],[1 1],'iter_max',5,'plot_conv',true,'plotfcn',plot_auc);
+
+%% Obtain extra outputs from the function
+% Consider a function that returns other information than just the
+% performance. For example, consider a dummy function returning
+% 3 random numbers for each sample calculated.
+f=@(x)deal(x(:,2)-sin(10*x(:,1))/4-0.5,num2cell(rand(size(x,1),3)));
+x=CODES.sampling.cvt(10,2);
+[y,extra_outputs]=f(x);
+
+svm=CODES.fit.svm(x,y,'UseParallel',true);
+[svm_col,extras]=CODES.sampling.edsd(f,svm,[0 0],[1 1],'iter_max',5,'extra_output',true);
+
+disp([svm_col{end}.X [cell2mat(extra_outputs);cell2mat(extras)]])
+
+%% References
+% <html><ul style="list-style-type:none">
+%   <li id="ref_bas"><span style="color:#005fce;">Basudhar and Missoum
+%   (2008)</span>: Basudhar A., Missoum S., (2008) <i>Adaptive explicit
+%   decision functions for probabilistic design and optimization using
+%   support vector machines</i>. Computers &amp; Structures
+%   86(19):1904-1917 - <a
+%   href="http://dx.doi.org/10.1016/j.compstruc.2008.02.008">DOI</a></li>
+% </ul></html>
+%
+%%
+%%
+% <html>Copyright &copy; 2015 Computational Optimal Design of Engineering Systems
+% (CODES) Laboratory. University of Arizona.</html>
+%%
+%
+% <html><table style="border: none">
+%   <tr style="border: none">
+%     <td style="border: none;padding-left: 0px;">
+%       <a href ="http://codes.arizona.edu/"><img style="height: 50px;" src ="CODES_logo.png"></a>
+%     </td><td style="border: none; vertical-align: middle;padding-left: 10px;">
+%       <a href ="http://codes.arizona.edu/"><span style="font-weight:bold;font-family:Arial;font-size: 20px;color: #002147"><span style="color: #AB0520;">C</span>omputational <span style="color: #AB0520;">O</span>ptimal <span style="color: #AB0520;">D</span>esign of<br><span style="color: #AB0520;">E</span>ngineering <span style="color: #AB0520;">S</span>ystems</span></a>
+%     </td><td style="border: none;padding-right: 0px;">
+%       <a href = "http://www.arizona.edu/"><img style="height: 50px;" src = "AZlogo.png"></a>
+%     </td>
+%   </tr>
+% </table></html>
+
+##### SOURCE END #####
+--></body></html>

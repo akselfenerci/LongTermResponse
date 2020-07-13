@@ -1,0 +1,187 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>CODES / common / hess_fd</title><meta name="generator" content="MATLAB 8.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-06-23"><meta name="DC.source" content="hess_fd.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1><a href="CODES.html">CODES</a> / <a href="common.html">common</a> / hess_fd</h1><!--introduction--><p><i>Hessian of f at x using finite difference</i></p><p>
+  <style type="text/css">
+    span.string{color:#A020F0;font-family:monospace;}
+    p{text-align: justify;}
+  </style>
+</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Syntax</a></li><li><a href="#2">Usage</a></li><li><a href="#3">Parameters</a></li><li><a href="#4">Example</a></li><li><a href="#5">See also</a></li></ul></div><h2>Syntax<a name="1"></a></h2><div><ul><li><tt>H=CODES.common.hess_fd(f,x)</tt> compute the Hessian matrix <tt>H</tt> using finite difference on <tt>f</tt> at <tt>x</tt>.</li><li><tt>[H,grad]=CODES.common.hess_fd(...)</tt> returns the central finite difference of the gradient <tt>grad</tt>.</li><li><tt>[H,grad,fx]=CODES.common.hess_fd(...)</tt> returns the function values <tt>fx</tt> of <tt>f</tt> at <tt>x</tt>.</li><li><tt>[...]=CODES.common.hess_fd(...,param,value)</tt> uses a list of parameters <tt>param</tt> and values <tt>value</tt> (<i>c.f.</i>, <a href="#params">parameter table</a>).</li></ul></div><h2>Usage<a name="2"></a></h2><p><tt>size(x,1)</tt> must be equal to 1. Returns the <tt>(size(x,2) x size(x,2))</tt> Hessian matrix.</p><h2>Parameters<a name="3"></a></h2><p><table id="params" style="border: none;width=100%">
+  <tr>
+    <th><tt>param</tt></th>
+    <th><tt>value</tt></th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><span class="string">'rel_diff'</span></td>
+    <td>positive numeric, {1e-5}</td>
+    <td>Finite difference step size.</td>
+  </tr>
+  <tr>
+    <td><span class="string">'fx'</span></td>
+    <td>numeric, { [ ] }</td>
+    <td>Function value at x <tt>f(x)</tt> (save one function evaluation).</td>
+  </tr>
+</table></p><h2>Example<a name="4"></a></h2><p>Compute finite diffence for:</p><p><img src="hess_fd_eq00973915430646887921.png" alt="$$f(x)=3x_1^2+x_2^3+x_1x_2\quad,\quad \left.\frac{\mathrm d^2f}{\mathrm d\mathbf{x}^2}\right|_{\mathbf{x}=[2,3]}=\left[\begin{array}{cc}6 &amp; 1\\1 &amp; 18\end{array}\right]$$"></p><pre class="codeinput">f=@(x)3*x(:,1).^2+x(:,2).^3+x(:,1)*x(:,2);
+H=CODES.common.hess_fd(f,[2 3]);
+
+CODES.common.disp_matrix(H,{<span class="string">'d2fdX12'</span>,<span class="string">'d2fdX1X2'</span>},<span class="keyword">...</span>
+    {<span class="string">'d2fdX2X1'</span>,<span class="string">'d2fdX22'</span>})
+</pre><pre class="codeoutput">          d2fdX2X1  d2fdX22
+ d2fdX12   5.99982  1.00002
+d2fdX1X2   1.00002  17.9995
+</pre><h2>See also<a name="5"></a></h2><p><a href="grad_fd.html">grad_fd</a></p><p>Copyright &copy; 2015 Computational Optimal Design of Engineering Systems
+(CODES) Laboratory. University of Arizona.</p><p><table style="border: none">
+  <tr style="border: none">
+    <td style="border: none;padding-left: 0px;">
+      <a href ="http://codes.arizona.edu/"><img style="height: 50px;" src ="CODES_logo.png"></a>
+    </td><td style="border: none; vertical-align: middle;padding-left: 10px;">
+      <a href ="http://codes.arizona.edu/"><span style="font-weight:bold;font-family:Arial;font-size: 20px;color: #002147"><span style="color: #AB0520;">C</span>omputational <span style="color: #AB0520;">O</span>ptimal <span style="color: #AB0520;">D</span>esign of<br><span style="color: #AB0520;">E</span>ngineering <span style="color: #AB0520;">S</span>ystems</span></a>
+    </td><td style="border: none;padding-right: 0px;">
+      <a href = "http://www.arizona.edu/"><img style="height: 50px;" src = "AZlogo.png"></a>
+    </td>
+  </tr>
+</table></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% <CODES.html CODES> / <common.html common> / hess_fd
+% _Hessian of f at x using finite difference_
+%
+% <html>
+%   <style type="text/css">
+%     span.string{color:#A020F0;font-family:monospace;}
+%     p{text-align: justify;}
+%   </style>
+% </html>
+%
+%% Syntax
+% * |H=CODES.common.hess_fd(f,x)| compute the Hessian matrix |H| using
+% finite difference on |f| at |x|.
+% * |[H,grad]=CODES.common.hess_fd(...)| returns the central finite
+% difference of the gradient |grad|.
+% * |[H,grad,fx]=CODES.common.hess_fd(...)| returns the function values
+% |fx| of |f| at |x|.
+% * |[...]=CODES.common.hess_fd(...,param,value)| uses a list of parameters
+% |param| and values |value| (_c.f._, <#params parameter table>).
+%
+%% Usage
+% |size(x,1)| must be equal to 1. Returns the |(size(x,2) x size(x,2))|
+% Hessian matrix.
+%
+%% Parameters
+% <html><table id="params" style="border: none;width=100%">
+%   <tr>
+%     <th><tt>param</tt></th>
+%     <th><tt>value</tt></th>
+%     <th>Description</th>
+%   </tr>
+%   <tr>
+%     <td><span class="string">'rel_diff'</span></td>
+%     <td>positive numeric, {1e-5}</td>
+%     <td>Finite difference step size.</td>
+%   </tr>
+%   <tr>
+%     <td><span class="string">'fx'</span></td>
+%     <td>numeric, { [ ] }</td>
+%     <td>Function value at x <tt>f(x)</tt> (save one function evaluation).</td>
+%   </tr>
+% </table></html>
+%
+%% Example
+% Compute finite diffence for:
+%
+% $$f(x)=3x_1^2+x_2^3+x_1x_2\quad,\quad \left.\frac{\mathrm d^2f}{\mathrm d\mathbf{x}^2}\right|_{\mathbf{x}=[2,3]}=\left[\begin{array}{cc}6 & 1\\1 & 18\end{array}\right]$$
+
+f=@(x)3*x(:,1).^2+x(:,2).^3+x(:,1)*x(:,2);
+H=CODES.common.hess_fd(f,[2 3]);
+
+CODES.common.disp_matrix(H,{'d2fdX12','d2fdX1X2'},...
+    {'d2fdX2X1','d2fdX22'})
+
+%% See also
+% <grad_fd.html grad_fd>
+%
+%%
+%%
+% <html>Copyright &copy; 2015 Computational Optimal Design of Engineering Systems
+% (CODES) Laboratory. University of Arizona.</html>
+%%
+%
+% <html><table style="border: none">
+%   <tr style="border: none">
+%     <td style="border: none;padding-left: 0px;">
+%       <a href ="http://codes.arizona.edu/"><img style="height: 50px;" src ="CODES_logo.png"></a>
+%     </td><td style="border: none; vertical-align: middle;padding-left: 10px;">
+%       <a href ="http://codes.arizona.edu/"><span style="font-weight:bold;font-family:Arial;font-size: 20px;color: #002147"><span style="color: #AB0520;">C</span>omputational <span style="color: #AB0520;">O</span>ptimal <span style="color: #AB0520;">D</span>esign of<br><span style="color: #AB0520;">E</span>ngineering <span style="color: #AB0520;">S</span>ystems</span></a>
+%     </td><td style="border: none;padding-right: 0px;">
+%       <a href = "http://www.arizona.edu/"><img style="height: 50px;" src = "AZlogo.png"></a>
+%     </td>
+%   </tr>
+% </table></html>
+
+##### SOURCE END #####
+--></body></html>
