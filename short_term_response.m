@@ -48,9 +48,13 @@ elements = settings.bridge.elements;
 TG2Le0 = settings.bridge.TG2Le0;
 rho = settings.bridge.rho;
 
+% wind profile
+profile = @(x, xRef, vRef) vRef;
+
+
 %%
 Vref = wind_input.U; % Wind velocity
-[ genCae, genKae ] = wawi.wind.compute_aero_matrices(omegaGlobal, Vref, Xref, adFun, nodes, elements, TG2Le0, TG2V, phiAeroFull, B, rho);
+[ genCae, genKae ] = wawi.wind.compute_aero_matrices(omegaGlobal, Vref, Xref, adFun, nodes, elements, TG2Le0, TG2V, phiAeroFull, B, rho,  profile);
 
 genMadd = zeros(size(genMs));
 genCadd = -genCae;
@@ -72,7 +76,7 @@ C = [0 0 0; % Decay coefficient in Davenports exponential format
 
 Sfun = @(w) wawi.wind.spectra.generic_Kaimal_matrix(w,z, nodes,Vref, Xref, TG2V, A , sigma, C);
 
-genAeroSqSq = wawi.wind.windaction(omegaGlobal, Sfun, Vref, Xref, loadCoeff, nodes, elements, TG2Le0, TG2V, phiAeroFull, rho, B, D);
+genAeroSqSq = wawi.wind.windaction(omegaGlobal, Sfun, Vref, Xref, loadCoeff, nodes, elements, TG2Le0, TG2V, phiAeroFull, rho, B, D, profile);
 
 %%
 

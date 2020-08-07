@@ -180,7 +180,7 @@ tbldot = table(X,Y,Z,real(ST_resp_stddot_vec),'VariableNames',{'U','sigma_u','si
 lmSTD = fitlm([X Y Z],real(ST_resp_std_vec) ,'quadratic');
 lmSTDdot = fitlm([X Y Z],real(ST_resp_stddot_vec) ,'quadratic');
 
-[ypred,yci] = predict(lm,[50 8 4]);
+[ypred,yci] = predict(lmSTD,[50 8 4]);
 
 save('RSmodel','lmSTD','lmSTDdot');
 
