@@ -39,11 +39,17 @@ h.ZLabel.String = 'Prob. density ';
 h.FontSize = 12;
 view([1 1 1]);
 savefig(strcat(figdir,'\','Prob_u_and_w_givenU.fig'));
+saveas(gcf,strcat(figdir,'\','Prob_u_and_w_givenU.emf'));
+close(gcf);
 
 %%
 
-Uvals = 0.01:0.1:25;
-Updf = @(x) wblpdf(x,5.1941,1.7946);
+% Uvals = 0.01:0.1:25;
+% Updf = @(x) wblpdf(x,5.1941,1.7946);
+
+Uvals = 0.01:0.1:40;
+Updf = @(x) lognpdf(x,1.0967,0.4894);
+
 figure; 
 plot(Uvals,Updf(Uvals));
 h = gca;
@@ -51,6 +57,8 @@ h.YLabel.String = 'Prob. density';
 h.XLabel.String = 'U (m/s)';
 h.FontSize = 12;
 savefig(strcat(figdir,'\','Pdf_U.fig'));
+saveas(gcf,strcat(figdir,'\','Pdf_U.emf'));
+close(gcf);
 
 
 [X,Y,Z] = meshgrid(Uvals,sigmauvals,sigmawvals);
@@ -71,6 +79,8 @@ h.ZLabel.String = 'Prob. density ';
 view([1 1 1]);
 h.FontSize = 12;
 savefig(strcat(figdir,'\','jointPdf_U_su.fig'));
+saveas(gcf,strcat(figdir,'\','jointPdf_U_su.emf'));
+close(gcf);
 
 
 
@@ -88,6 +98,8 @@ h.ZLabel.String = 'Prob. ';
 view([1 1 1]);
 h.FontSize = 12;
 savefig(strcat(figdir,'\','jointPdf_su_sw.fig'));
+saveas(gcf,strcat(figdir,'\','jointPdf_su_sw.emf'));
+close(gcf);
 
 
 [XX,YY] = meshgrid(sigmawvals,Uvals);
@@ -103,4 +115,6 @@ h.ZLabel.String = 'Prob. ';
 view([1 1 1]);
 h.FontSize = 12;
 savefig(strcat(figdir,'\','jointPdf_U_sw.fig'));
+saveas(gcf,strcat(figdir,'\','jointPdf_U_sw.emf'));
+close(gcf);
 

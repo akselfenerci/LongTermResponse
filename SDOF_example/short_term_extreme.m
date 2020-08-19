@@ -7,5 +7,7 @@ upcross = (stddot./(2*pi.*std));
 
 Fx_d = exp(-upcross.*Tshort.*exp(-x.^2./(2.*std.^2)));
 
+
+
 end
 

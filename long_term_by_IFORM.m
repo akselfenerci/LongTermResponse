@@ -17,7 +17,7 @@ TTinv = @(u) transform_variables_u_to_x( u,RSM );
 
 %%
 
-Ftarget = 1-1/(365*24*6);
+Ftarget = 1-1/(365*24*6*100);
 
 Beta = norminv(Ftarget);
 

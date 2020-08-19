@@ -15,11 +15,11 @@ TT = @(x) transform_variables_x_to_u( x,RSM );
 
 TTinv = @(u) transform_variables_u_to_x( u,RSM );
 
-% xx = [20 2 1 0.5];
-% 
-% u = TT(xx);
-% 
-% xback = TTinv(u);
+xx = [20 2 1 0.5];
+
+u = TT(xx);
+
+xback = TTinv(u);
 
 
 

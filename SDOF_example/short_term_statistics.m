@@ -8,6 +8,7 @@ figdir = strcat(cd,'\figures\',tag);
 mkdir(figdir);
 
 
+
 %%
 Tshort = 600;
 
@@ -20,7 +21,7 @@ sw = 2;
 [ std,stddot ] = short_term_response( U,su,sw );
 
 % short term extreme response
-x = 0.01:0.001:0.3;
+x = 0.1:0.01:0.5;
 [ Fx_10min ] = short_term_extreme( std,stddot,Tshort,x );
 
 
@@ -40,4 +41,8 @@ h.LineWidth = 2;
 grid on;
 h.Children.LineWidth = 2;
 savefig(strcat(figdir,'\','short_term_extreme_CDF.fig'));
+saveas(gcf,strcat(figdir,'\','short_term_extreme_CDF.emf'));
+close(gcf);
+
+
 
