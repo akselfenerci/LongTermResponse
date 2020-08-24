@@ -1,7 +1,7 @@
 clearvars
 close all
 clc
-0
+
 dbstop if error
 
 cd('C:\Users\akselfe\Documents\GitHub\LongTermResponse\SDOF_example');
@@ -67,4 +67,20 @@ Fx = ( Mcount/(m*NN) )^(6*24*365*100);
 CDFlong = load(strcat(savedir,'\Fx_MC.mat'));
 
 figure; 
-plot(CDFlong.xrange,CDFlong.Fxrange);
+plot(CDFlong.xrange,CDFlong.Fxrange,'-b');
+hold on; grid on;
+plot(CDFlong.xrange,CDFlong.Fxrange.^50,'--r');
+plot(CDFlong.xrange,CDFlong.Fxrange.^100,'.k');
+h = gca;
+h.FontSize = 12;
+h.LineWidth = 1.5;
+h.Children(1).LineWidth = 1.5;
+h.Children(2).LineWidth = 1.5;
+h.Children(3).LineWidth = 1.5;
+h.YLabel.String = 'F_{R_{LT}|w}';
+h.XLabel.String = 'R_{LT}';
+legend('1-year','50-years','100 years');
+savefig(strcat(figdir,'\','CDF_MC.fig'));
+saveas(gcf,strcat(figdir,'\','CDF_MC.emf'));
+close(gcf);
+
