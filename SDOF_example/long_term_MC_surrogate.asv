@@ -65,5 +65,3 @@ Fx = ( Mcount/(m*NN) )^(6*24*365*100);
 
 CDFlong = load(strcat(savedir,'\Fx_MC.mat'));
 
-figure; 
-plot(CDFlong.xrange,CDFlong.Fxrange);

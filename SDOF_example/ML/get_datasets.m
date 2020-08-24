@@ -3,7 +3,17 @@ dbstop if error
 
 cd('C:\Users\akselfe\OneDrive - NTNU\DERS\matlab\LongTermResponse\SDOF_example\ML');
 
-addpath('C:\Users\akselfe\OneDrive - NTNU\DERS\matlab\LongTermResponse\SDOF_example');
+main = 'C:\Users\akselfe\OneDrive - NTNU\DERS\matlab\LongTermResponse\SDOF_example';
+addpath(main);
+
+
+tag = 'surrogate';
+
+figdir = strcat(main,'\figures\',tag);
+mkdir(figdir);
+
+savedir = strcat(main,'\saved\',tag);
+mkdir(savedir);
 
 
 TTinv = @(u) transform_u_to_x( u );
@@ -39,7 +49,7 @@ figure; plot(xvals(:,1),real(Xd),'x');
 
 Input_Output = [U1vec U2vec U3vec U4vec Xd];
 
-save('Dataset_unifromgrid','Input', 'Output');
+save(strcat(savedir,'Dataset_unifromgrid'),'Input', 'Output');
 
 
 %%
