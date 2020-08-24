@@ -20,7 +20,7 @@ mkdir(savedir);
 
 %%
 
-xrange = 0.001:0.01:2.5;
+xrange = 0.001:0.01:0.5;
 
 for i = 1:length(xrange)
     
