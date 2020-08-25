@@ -1,0 +1,319 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Examples / Reliability assessment / subset</title><meta name="generator" content="MATLAB 8.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-06-23"><meta name="DC.source" content="Test_reliability_subset.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1><a href="demo.html">Examples</a> / <a href="demo_reliability.html">Reliability assessment</a> / subset</h1><!--introduction--><p>This file is a complete demo of the capability of the <tt>subset</tt> function from the CODES toolbox.</p><p>
+  <style type="text/css">
+    span.string{color:#A020F0;font-family:monospace;}
+    p{text-align: justify;}
+  </style>
+</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Documentation</a></li><li><a href="#2">Set rng</a></li><li><a href="#3">Complex example</a></li><li><a href="#6">Change the target distribution</a></li><li><a href="#8">Compute sensitivities dPfdtheta</a></li><li><a href="#9">Compute sensitivities dPfdz</a></li></ul></div><h2>Documentation<a name="1"></a></h2><p>The documentation for the <tt>subset</tt> function can be found <a href="subset.html">here</a>.</p><h2>Set rng<a name="2"></a></h2><p>Set random number generator seed:</p><pre class="codeinput">rng(0)
+</pre><h2>Complex example<a name="3"></a></h2><p>Compare FORM, SORM, Subset and MC</p><pre class="codeinput">g=@(x)-(x(:,1)+x(:,2)).^2+20;
+res_form=CODES.reliability.form(g,2,<span class="string">'solver'</span>,<span class="string">'hl-rf'</span>);
+res_sorm=CODES.reliability.sorm(g,2,<span class="string">'res_form'</span>,res_form);
+res_subset=CODES.reliability.subset(g,2,<span class="string">'vectorial'</span>,true);
+res_mc=CODES.reliability.mc(g,2,<span class="string">'vectorial'</span>,true);
+
+CODES.common.disp_matrix(<span class="keyword">...</span>
+    [res_form.beta res_sorm.beta res_subset.beta res_mc.beta;<span class="keyword">...</span>
+    res_form.Pf res_sorm.Pf res_subset.Pf res_mc.Pf;<span class="keyword">...</span>
+    res_form.LS_count res_sorm.LS_count res_subset.LS_count res_mc.LS_count],<span class="keyword">...</span>
+    {<span class="string">'Beta'</span>,<span class="string">'Pf'</span>,<span class="string">'# funct. calls'</span>},{<span class="string">'FORM'</span>,<span class="string">'SORM'</span>,<span class="string">'SubSim'</span>,<span class="string">'MC'</span>})
+</pre><pre class="codeoutput">                       FORM        SORM      SubSim        MC
+          Beta      3.16228     3.05994     2.95188    2.9492
+            Pf  0.000782701  0.00110692  0.00157922  0.001593
+# funct. calls           73           9      268024     1e+06
+</pre><p>Compute and compare sample coefficient of variation of SubSim and MC</p><pre class="codeinput"><span class="keyword">for</span> i=1:200
+    res_subset(i)=CODES.reliability.subset(g,2,<span class="string">'vectorial'</span>,true);
+    res_mc(i)=CODES.reliability.mc(g,2,<span class="string">'vectorial'</span>,true);
+<span class="keyword">end</span>
+
+CODES.common.disp_matrix(<span class="keyword">...</span>
+    [mean(cell2mat({res_subset.LS_count})) mean(cell2mat({res_mc.LS_count}));<span class="keyword">...</span>
+    mean(cell2mat({res_subset.beta})) mean(cell2mat({res_mc.beta}));<span class="keyword">...</span>
+    mean(cell2mat({res_subset.Pf})) mean(cell2mat({res_mc.Pf}));<span class="keyword">...</span>
+    100*std(cell2mat({res_subset.beta}))/mean(cell2mat({res_subset.beta})) 100*std(cell2mat({res_mc.beta}))/mean(cell2mat({res_mc.beta}));<span class="keyword">...</span>
+    100*std(cell2mat({res_subset.Pf}))/mean(cell2mat({res_subset.Pf})) 100*std(cell2mat({res_mc.Pf}))/mean(cell2mat({res_mc.Pf}))],<span class="keyword">...</span>
+    {<span class="string">'# funct. calls'</span>,<span class="string">'E[Beta]'</span>,<span class="string">'E[Pf]'</span>,<span class="string">'cv Beta'</span>,<span class="string">'cv Pf'</span>},{<span class="string">'SubSim'</span>,<span class="string">'MC'</span>})
+</pre><pre class="codeoutput">                    SubSim         MC
+# funct. calls      268088      1e+06
+       E[Beta]     2.95462    2.95534
+         E[Pf]  0.00156577  0.0015622
+       cv Beta    0.280376   0.295351
+         cv Pf     2.67647    2.82895
+</pre><p>Plot the limit state</p><pre class="codeinput">figure(<span class="string">'Position'</span>,[200 200 500 500])
+[X,Y]=meshgrid(linspace(-4,4,100));
+Z=reshape(g([X(:) Y(:)]),size(X));
+Colors=get(gca,<span class="string">'ColorOrder'</span>);
+contour(X,Y,Z,[0 0],<span class="string">'Color'</span>,Colors(end,:))
+hold <span class="string">on</span>
+plot(res_form.MPP(1),res_form.MPP(2),<span class="string">'s'</span>,<span class="string">'MarkerFaceColor'</span>,Colors(4,:),<span class="string">'MarkerEdgeColor'</span>,Colors(4,:))
+plot(0,0,<span class="string">'o'</span>)
+</pre><img vspace="5" hspace="5" src="Test_reliability_subset_01.png" alt=""> <h2>Change the target distribution<a name="6"></a></h2><p>In this example, consider same limit state function but we modify the marginal PDFs. For example, if the two random variables follow gaussian distribution with respective means 1 and 0 and respective standard deviation 1 and 0.5:</p><pre class="codeinput">pdfs_target=@(x)normpdf(x,repmat([1 0],size(x,1),1),repmat([1 0.5],size(x,1),1));
+sampler=@(N)normrnd(repmat([1 0],N,1),repmat([1 0.5],N,1));
+res_subsim=CODES.reliability.subset(g,2,<span class="string">'vectorial'</span>,true,<span class="string">'PDFs_target'</span>,pdfs_target,<span class="string">'sampler'</span>,sampler);
+disp(res_subsim);
+</pre><pre class="codeoutput">          Pf: 9.2893e-04
+        beta: 3.1121
+       steps: 4
+    LS_count: 341035
+
+</pre><p><a id="sensitivities"></a></p><h2>Compute sensitivities dPfdtheta<a name="8"></a></h2><p>Here are two examples on how to compute sensitivities of the estimated probability of failure. See <a href="subset.html#sensitivities"><tt>subset</tt> help</a> for details on the options.</p><p>Using a simple standard gaussian space and a linear limit state:</p><pre class="codeinput">d=3;
+g=@(x)-x(:,2)-x(:,1)+d;
+beta=@(mus)(d-sum(mus))/sqrt(2);
+dbetadtheta=-1/sqrt(2)*ones(1,2);
+dPdfdtheta=@(mus)-dbetadtheta*normpdf(-beta(mus));
+
+lnPDF=@(x,mus)sum(log(normpdf(x,mus,[1 1])),2);
+dlnPDF=@(x,mus)bsxfun(@minus,x,repmat(mus,size(x,1),1));
+
+tic;
+res_subset=CODES.reliability.subset(g,2,<span class="string">'vectorial'</span>,true,<span class="string">'lnPDF'</span>,lnPDF,<span class="string">'theta'</span>,[0 0]);
+time_ln=toc;
+tic;
+res_subset1=CODES.reliability.subset(g,2,<span class="string">'vectorial'</span>,true,<span class="string">'dlnPDF'</span>,@(x)dlnPDF(x,[0 0]));
+time_dln=toc;
+
+CODES.common.disp_matrix([res_subset.dPfdtheta res_subset.dbetadtheta time_ln;<span class="keyword">...</span>
+    res_subset1.dPfdtheta res_subset1.dbetadtheta time_dln;
+    dPdfdtheta([0 0]) dbetadtheta 0],{<span class="string">'ln'</span>,<span class="string">'dln'</span>,<span class="string">'ref'</span>},<span class="keyword">...</span>
+    {<span class="string">'dPfdtheta1'</span>,<span class="string">'dPfdtheta2'</span>,<span class="string">'dbetadtheta1'</span>,<span class="string">'dbetadtheta2'</span>,<span class="string">'time'</span>});
+</pre><pre class="codeoutput">     dPfdtheta1  dPfdtheta2  dbetadtheta1  dbetadtheta2       time
+ ln   0.0296094   0.0298026      -0.70314     -0.707728    22.1964
+dln   0.0299514   0.0297982     -0.709238     -0.705612  0.0898568
+ref   0.0297326   0.0297326     -0.707107     -0.707107          0
+</pre><h2>Compute sensitivities dPfdz<a name="9"></a></h2><p>Using a simple standard gaussian space and a linear limit state:</p><pre class="codeinput">d=4;
+z=[1 2];
+gg=@(x)deal(-sum(z)-x+d,-ones(size(x,1),2));
+g=@(x)-z-x+d;
+Pf=@(z)1-normcdf(d-sum(z));
+beta=@(z)-norminv(Pf(z));
+dPfdz=@(z)normpdf(d-sum(z));
+dbetadz=@(z)-dPfdz(z)/normpdf(-beta(z));
+
+res_subset=CODES.reliability.subset(gg,1,<span class="string">'vectorial'</span>,true,<span class="string">'nz'</span>,2,<span class="string">'frac'</span>,0.5,<span class="string">'dirac'</span>,<span class="string">'gauss'</span>);
+
+CODES.common.disp_matrix([res_subset.dPfdz res_subset.dbetadz;<span class="keyword">...</span>
+    dPfdz(z) dPfdz(z) dbetadz(z) dbetadz(z)],{<span class="string">'est'</span>,<span class="string">'ref'</span>},<span class="keyword">...</span>
+    {<span class="string">'dPfdz1'</span>,<span class="string">'dPfdz2'</span>,<span class="string">'dbetadz1'</span>,<span class="string">'dbetadz2'</span>});
+</pre><pre class="codeoutput">       dPfdz1    dPfdz2   dbetadz1   dbetadz2
+est  0.237711  0.237711  -0.991311  -0.991311
+ref  0.241971  0.241971         -1         -1
+</pre><p>Copyright &copy; 2015 Computational Optimal Design of Engineering Systems
+(CODES) Laboratory. University of Arizona.</p><p><table style="border: none">
+  <tr style="border: none">
+    <td style="border: none;padding-left: 0px;">
+      <a href ="http://codes.arizona.edu/"><img style="height: 50px;" src ="CODES_logo.png"></a>
+    </td><td style="border: none; vertical-align: middle;padding-left: 10px;">
+      <a href ="http://codes.arizona.edu/"><span style="font-weight:bold;font-family:Arial;font-size: 20px;color: #002147"><span style="color: #AB0520;">C</span>omputational <span style="color: #AB0520;">O</span>ptimal <span style="color: #AB0520;">D</span>esign of<br><span style="color: #AB0520;">E</span>ngineering <span style="color: #AB0520;">S</span>ystems</span></a>
+    </td><td style="border: none;padding-right: 0px;">
+      <a href = "http://www.arizona.edu/"><img style="height: 50px;" src = "AZlogo.png"></a>
+    </td>
+  </tr>
+</table></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% <demo.html Examples> / <demo_reliability.html Reliability assessment> / subset
+% This file is a complete demo of the capability of the |subset| function
+% from the CODES toolbox.
+%
+% <html>
+%   <style type="text/css">
+%     span.string{color:#A020F0;font-family:monospace;}
+%     p{text-align: justify;}
+%   </style>
+% </html>
+%
+%% Documentation
+% The documentation for the |subset| function can be found <subset.html
+% here>.
+%
+%% Set rng
+% Set random number generator seed:
+rng(0)
+
+%% Complex example
+% Compare FORM, SORM, Subset and MC
+
+g=@(x)-(x(:,1)+x(:,2)).^2+20;
+res_form=CODES.reliability.form(g,2,'solver','hl-rf');
+res_sorm=CODES.reliability.sorm(g,2,'res_form',res_form);
+res_subset=CODES.reliability.subset(g,2,'vectorial',true);
+res_mc=CODES.reliability.mc(g,2,'vectorial',true);
+
+CODES.common.disp_matrix(...
+    [res_form.beta res_sorm.beta res_subset.beta res_mc.beta;...
+    res_form.Pf res_sorm.Pf res_subset.Pf res_mc.Pf;...
+    res_form.LS_count res_sorm.LS_count res_subset.LS_count res_mc.LS_count],...
+    {'Beta','Pf','# funct. calls'},{'FORM','SORM','SubSim','MC'})
+
+%%
+% Compute and compare sample coefficient of variation of SubSim and MC
+
+for i=1:200
+    res_subset(i)=CODES.reliability.subset(g,2,'vectorial',true);
+    res_mc(i)=CODES.reliability.mc(g,2,'vectorial',true);
+end
+
+CODES.common.disp_matrix(...
+    [mean(cell2mat({res_subset.LS_count})) mean(cell2mat({res_mc.LS_count}));...
+    mean(cell2mat({res_subset.beta})) mean(cell2mat({res_mc.beta}));...
+    mean(cell2mat({res_subset.Pf})) mean(cell2mat({res_mc.Pf}));...
+    100*std(cell2mat({res_subset.beta}))/mean(cell2mat({res_subset.beta})) 100*std(cell2mat({res_mc.beta}))/mean(cell2mat({res_mc.beta}));...
+    100*std(cell2mat({res_subset.Pf}))/mean(cell2mat({res_subset.Pf})) 100*std(cell2mat({res_mc.Pf}))/mean(cell2mat({res_mc.Pf}))],...
+    {'# funct. calls','E[Beta]','E[Pf]','cv Beta','cv Pf'},{'SubSim','MC'})
+
+%%
+% Plot the limit state
+
+figure('Position',[200 200 500 500])
+[X,Y]=meshgrid(linspace(-4,4,100));
+Z=reshape(g([X(:) Y(:)]),size(X));
+Colors=get(gca,'ColorOrder');
+contour(X,Y,Z,[0 0],'Color',Colors(end,:))
+hold on
+plot(res_form.MPP(1),res_form.MPP(2),'s','MarkerFaceColor',Colors(4,:),'MarkerEdgeColor',Colors(4,:))
+plot(0,0,'o')
+
+%% Change the target distribution
+% In this example, consider same limit state function but we modify the
+% marginal PDFs. For example, if the two random variables follow gaussian
+% distribution with respective means 1 and 0 and respective standard
+% deviation 1 and 0.5:
+
+pdfs_target=@(x)normpdf(x,repmat([1 0],size(x,1),1),repmat([1 0.5],size(x,1),1));
+sampler=@(N)normrnd(repmat([1 0],N,1),repmat([1 0.5],N,1));
+res_subsim=CODES.reliability.subset(g,2,'vectorial',true,'PDFs_target',pdfs_target,'sampler',sampler);
+disp(res_subsim);
+
+%%
+% <html><a id="sensitivities"></a></html>
+%% Compute sensitivities dPfdtheta
+% Here are two examples on how to compute sensitivities of the estimated
+% probability of failure. See <subset.html#sensitivities |subset| help>
+% for details on the options.
+%
+% Using a simple standard gaussian space and a linear limit state:
+
+d=3;
+g=@(x)-x(:,2)-x(:,1)+d;
+beta=@(mus)(d-sum(mus))/sqrt(2);
+dbetadtheta=-1/sqrt(2)*ones(1,2);
+dPdfdtheta=@(mus)-dbetadtheta*normpdf(-beta(mus));
+
+lnPDF=@(x,mus)sum(log(normpdf(x,mus,[1 1])),2);
+dlnPDF=@(x,mus)bsxfun(@minus,x,repmat(mus,size(x,1),1));
+
+tic;
+res_subset=CODES.reliability.subset(g,2,'vectorial',true,'lnPDF',lnPDF,'theta',[0 0]);
+time_ln=toc;
+tic;
+res_subset1=CODES.reliability.subset(g,2,'vectorial',true,'dlnPDF',@(x)dlnPDF(x,[0 0]));
+time_dln=toc;
+
+CODES.common.disp_matrix([res_subset.dPfdtheta res_subset.dbetadtheta time_ln;...
+    res_subset1.dPfdtheta res_subset1.dbetadtheta time_dln;
+    dPdfdtheta([0 0]) dbetadtheta 0],{'ln','dln','ref'},...
+    {'dPfdtheta1','dPfdtheta2','dbetadtheta1','dbetadtheta2','time'});
+
+%% Compute sensitivities dPfdz
+% Using a simple standard gaussian space and a linear limit state:
+
+d=4;
+z=[1 2];
+gg=@(x)deal(-sum(z)-x+d,-ones(size(x,1),2));
+g=@(x)-z-x+d;
+Pf=@(z)1-normcdf(d-sum(z));
+beta=@(z)-norminv(Pf(z));
+dPfdz=@(z)normpdf(d-sum(z));
+dbetadz=@(z)-dPfdz(z)/normpdf(-beta(z));
+
+res_subset=CODES.reliability.subset(gg,1,'vectorial',true,'nz',2,'frac',0.5,'dirac','gauss');
+
+CODES.common.disp_matrix([res_subset.dPfdz res_subset.dbetadz;...
+    dPfdz(z) dPfdz(z) dbetadz(z) dbetadz(z)],{'est','ref'},...
+    {'dPfdz1','dPfdz2','dbetadz1','dbetadz2'});
+
+%%
+%%
+% <html>Copyright &copy; 2015 Computational Optimal Design of Engineering Systems
+% (CODES) Laboratory. University of Arizona.</html>
+%%
+%
+% <html><table style="border: none">
+%   <tr style="border: none">
+%     <td style="border: none;padding-left: 0px;">
+%       <a href ="http://codes.arizona.edu/"><img style="height: 50px;" src ="CODES_logo.png"></a>
+%     </td><td style="border: none; vertical-align: middle;padding-left: 10px;">
+%       <a href ="http://codes.arizona.edu/"><span style="font-weight:bold;font-family:Arial;font-size: 20px;color: #002147"><span style="color: #AB0520;">C</span>omputational <span style="color: #AB0520;">O</span>ptimal <span style="color: #AB0520;">D</span>esign of<br><span style="color: #AB0520;">E</span>ngineering <span style="color: #AB0520;">S</span>ystems</span></a>
+%     </td><td style="border: none;padding-right: 0px;">
+%       <a href = "http://www.arizona.edu/"><img style="height: 50px;" src = "AZlogo.png"></a>
+%     </td>
+%   </tr>
+% </table></html>
+
+##### SOURCE END #####
+--></body></html>

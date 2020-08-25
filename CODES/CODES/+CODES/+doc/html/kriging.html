@@ -1,0 +1,369 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>CODES / fit / kriging</title><meta name="generator" content="MATLAB 8.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-06-23"><meta name="DC.source" content="kriging.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1><a href="CODES.html">CODES</a> / <a href="fit_main.html">fit</a> / kriging</h1><!--introduction--><p><i>Train a Kriging</i></p><p>
+  <style type="text/css">
+    span.string{color:#A020F0;font-family:monospace;}
+    p{text-align: justify;}
+  </style>
+</p><p><a id="syntax"></a></p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Syntax</a></li><li><a href="#2">Description</a></li><li><a href="#3">Training Options</a></li><li><a href="#4">Evaluation and Post-Processing</a></li><li><a href="#5">Mini tutorial</a></li><li><a href="#6">References</a></li></ul></div><h2>Syntax<a name="1"></a></h2><div><ul><li><tt>kr=CODES.fit.kriging(x,y)</tt> builds a kriging based on the training set <tt>(x,y)</tt>.</li><li><tt>kr=CODES.fit.kriging(...,param,value)</tt> uses a list of parameters <tt>param</tt> and values <tt>value</tt> (<i>c.f.</i>, <a href="#params">parameter table</a>).</li></ul></div><p><a id="description"></a></p><h2>Description<a name="2"></a></h2><p>For a training set <img src="kriging_eq05815563708094362795.png" alt="$\left[\underline{\mathbf{X}},\underline{Y}\right]$"> made of pairs <img src="kriging_eq14615299870812348113.png" alt="$\mathbf{x}^{(i)}$"> and <img src="kriging_eq17586692898611367280.png" alt="$y^{(i)}$"> such that:</p><p><img src="kriging_eq00035171442464001849.png" alt="$$y^{(i)}=f\left(\mathbf{x}^{(i)}\right)$$"></p><p>and a mean function <img src="kriging_eq11319871188381094158.png" alt="$m$"> and an auto-correlation function <img src="kriging_eq09383517553865297800.png" alt="$K_\theta$">, the covariance function is defined as:</p><p><img src="kriging_eq02096386015237585671.png" alt="$$k\left(\mathbf{x},\mathbf{x}^\prime\right)=\sigma_Y^2K_\theta\left(\mathbf{x},\mathbf{x}^\prime\right)+\sigma_n^2\mathbf{I}\left[\mathbf{x}=\mathbf{x}^\prime\right]$$"></p><p>where <img src="kriging_eq15021309525570586138.png" alt="$\sigma_Y^2$"> is the Kriging variance and <img src="kriging_eq03379119733281520143.png" alt="$\sigma_n^2$"> is the inherent variance, also referred to as nugget or observation variance.</p><p>The training covaraince matrix and mean matrix are defined as:</p><p><img src="kriging_eq08887554802893771971.png" alt="$$\Sigma_{tr}=\left[\begin{array}{ccc}k\left(\mathbf{x}^{(1)},\mathbf{x}^{(1)}\right) &amp; \dots &amp; k\left(\mathbf{x}^{(1)},\mathbf{x}^{(n)}\right)\\\vdots &amp; \ddots &amp; \vdots\\k\left(\mathbf{x}^{(n)},\mathbf{x}^{(1)}\right) &amp; \dots &amp; k\left(\mathbf{x}^{(n)},\mathbf{x}^{(n)}\right)\end{array}\right]$$"></p><p><img src="kriging_eq05363446584714253241.png" alt="$$\mu_{tr}=\left[m\left(\mathbf{x}^{(1)}\right),\dots,m\left(\mathbf{x}^{(n)}\right)\right]$$"></p><p>The Kriging prediction and prediction standard error are defined as:</p><p><img src="kriging_eq03037459327215370578.png" alt="$$\widetilde{f}\left(\mathbf{x}\right)=m\left(\mathbf{x}\right)+\left(\underline{Y}^T-\mu_{tr}\right)\Sigma_{tr}^{-1}\Sigma_{\mathbf{x}}^T$$"></p><p><img src="kriging_eq12494943255731415471.png" alt="$$\widetilde{f}^{se}\left(\mathbf{x}\right)=\sqrt{k\left(\mathbf{x},\mathbf{x}\right)-\Sigma_\mathbf{x}\Sigma_{tr}^{-1}\Sigma_\mathbf{x}^T}$$"></p><p><a id="covariance"></a><h3>Correlation functions</h3></p><p>One covariance function is available:</p><div><ul><li>Gaussian:</li></ul></div><p><img src="kriging_eq05169985291235111773.png" alt="$$K_\theta(\mathbf{x},\mathbf{x}^\prime)=\exp\left[\frac{||\mathbf{x}-\mathbf{x}^\prime||^2}{2\theta^2}\right]$$"></p><p><a id="mean"></a><h3>Mean Functions</h3></p><p>One mean function is available:</p><div><ul><li>0 order polynomial:</li></ul></div><p><img src="kriging_eq06358697436251248014.png" alt="$$m\left(\mathbf{x}\right)=\beta$$"></p><p><a id="solvers"></a><h3>Solvers</h3></p><p>Two solvers are available:</p><p><ul>
+  <li><span class="string">'CODES'</span>: An implementation from
+  scratch.</li>
+  <li><span class="string">'DACE'</span> Uses the <a
+  href="http://www.imm.dtu.dk/~hbni/dace">DACE Toolbox</a> with minor
+  numerical improvement in the prediction.</li>
+</ul></p><p><a id="training"></a></p><h2>Training Options<a name="3"></a></h2><p><table id="params" style="border: none">
+  <tr>
+    <th><span class="ms">param</span></th>
+    <th><span class="ms">value</span></th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><span class="string">'scale'</span></td>
+    <td>{<span class="string">'square'</span>}, <span class="string">'circle'</span>, <span class="string">'none'</span></td>
+    <td>Define scaling method for the inputs (<i>c.f.</i>, <a href=#scaling>Scaling</a> for details).</td>
+  </tr>
+  <tr>
+    <td><span class="string">'UseParallel'</span></td>
+    <td>logical, {<tt>false</tt>}</td>
+    <td>Switch to use parallel settings.</td>
+  </tr>
+  <tr>
+    <td><span class="string">'theta'</span></td>
+    <td>numeric, { [ ] }</td>
+    <td>Value for kernel parameter. If [ ], should be calibrated.</td>
+  </tr>
+  <tr>
+    <td><span class="string">'delta_2'</span></td>
+    <td>numeric, {<tt>0</tt>}</td>
+    <td>Only if <span class="string">'regression'</span> set to <tt>true</tt>. Value for &ldquo;nugget&rdquo; parameter. If left to default, should be calibrated.</td>
+  </tr>
+  <tr>
+    <td><span class="string">'mean_fun'</span></td>
+    <td>{<span class="string">'poly0'</span>}</td>
+    <td>Mean value function, see <a href=#mean>Mean functions</a>.</td>
+  </tr>
+  <tr>
+    <td><span class="string">'cov_fun'</span></td>
+    <td>{<span class="string">'corr'</span>}</td>
+    <td>Correlation function (also referred to as kernel or auto-correlation function), see <a href=#covariance>Correlation functions</a>.</td>
+  </tr>
+  <tr>
+    <td><span class="string">'scale_y'</span></td>
+    <td>{<span class="string">'square'</span>}, <span class="string">'circle'</span>, <span class="string">'none'</span></td>
+    <td>Define scaling method for the ouputs (<i>c.f.</i>, <a href=meta.html#scaling>Scaling (meta)</a> for details)</td>
+  </tr>
+  <tr>
+    <td><span class="string">'solver'</span></td>
+    <td>{<span class="string">'CODES'</span>} or <span class="string">'DACE'</span></td>
+    <td>Type of solver to use to train the Kriging, see <a href=#solvers>Solvers</a>.</td>
+  </tr>
+  <tr>
+    <td><span class="string">'regression'</span></td>
+    <td>logical {<tt>false</tt>}</td>
+    <td>Whether regression kriging should be used. This is achieved by adding a &ldquo;nugget&rdquo; <span class="string">'delta_2'</span> on the diagonal of the correlation matrix, see <a href=#description>Description</a>.</td>
+  </tr>
+  <tr>
+    <td><span class="string">'display'</span></td>
+    <td>logical {<tt>true</tt>}</td>
+    <td>Wether information should be displayed. For now, only display warning if correlation matrix needs to be conditioned (further than <span class="string">'delta_2'</span>).</td>
+  </tr>
+  <tr>
+    <td><span class="string">'theta_min'</span></td>
+    <td>numeric, { [ ] }</td>
+    <td>Only if <span class="string">'solver'</span> set to <span class="string">'DACE'</span>. Lower bound for the <span class="string">'theta'</span> search.</td>
+  </tr>
+  <tr>
+    <td><span class="string">'theta_max'</span></td>
+    <td>numeric, { [ ] }</td>
+    <td>Only if <span class="string">'solver'</span> set to <span class="string">'DACE'</span>. Upper bound for the <span class="string">'theta'</span> search.</td>
+  </tr>
+</table></p><p><a id="evaluation"></a></p><h2>Evaluation and Post-Processing<a name="4"></a></h2><p>
+<link rel="stylesheet" type="text/css" href="demoindex.css"></link>
+    <table id="demo_table" border="0" cellspacing="0" cellpadding="0" style="width:491px">
+        <tr class="demorow">
+            <td class="demopanel-thumbnail"><a href="kriging_method.html"><img src="type_m-file.png"></a></td>
+            <td class="demopanel-description"><a href="kriging_method.html">Capabilities of a <tt>Kriging</tt> object.</a><br></td>
+        </tr>
+    </table>
+</p><p><a id="example"></a></p><h2>Mini tutorial<a name="5"></a></h2><p>
+<link rel="stylesheet" type="text/css" href="demoindex.css"></link>
+    <table id="demo_table" border="0" cellspacing="0" cellpadding="0" style="width:491px">
+        <tr class="demorow">
+            <td class="demopanel-thumbnail"><a href="Test_fit_kriging.html"><img src="type_m-file.png"></a></td>
+            <td class="demopanel-description"><a href="Test_fit_kriging.html">A mini tutorial of the capabilities of the <tt>Kriging</tt> class.</a><br></td>
+        </tr>
+    </table>
+</p><h2>References<a name="6"></a></h2><p><ul style="list-style-type:none">
+  <li id="ref_dace"><a href="http://www.imm.dtu.dk/~hbni/dace">DACE Toolbox</a></li>
+</ul></p><p>Copyright &copy; 2015 Computational Optimal Design of Engineering Systems
+(CODES) Laboratory. University of Arizona.</p><p><table style="border: none">
+  <tr style="border: none">
+    <td style="border: none;padding-left: 0px;">
+      <a href ="http://codes.arizona.edu/"><img style="height: 50px;" src ="CODES_logo.png"></a>
+    </td><td style="border: none; vertical-align: middle;padding-left: 10px;">
+      <a href ="http://codes.arizona.edu/"><span style="font-weight:bold;font-family:Arial;font-size: 20px;color: #002147"><span style="color: #AB0520;">C</span>omputational <span style="color: #AB0520;">O</span>ptimal <span style="color: #AB0520;">D</span>esign of<br><span style="color: #AB0520;">E</span>ngineering <span style="color: #AB0520;">S</span>ystems</span></a>
+    </td><td style="border: none;padding-right: 0px;">
+      <a href = "http://www.arizona.edu/"><img style="height: 50px;" src = "AZlogo.png"></a>
+    </td>
+  </tr>
+</table></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% <CODES.html CODES> / <fit_main.html fit> / kriging
+% _Train a Kriging_
+%
+% <html>
+%   <style type="text/css">
+%     span.string{color:#A020F0;font-family:monospace;}
+%     p{text-align: justify;}
+%   </style>
+% </html>
+%
+% <html><a id="syntax"></a></html>
+%% Syntax
+% * |kr=CODES.fit.kriging(x,y)| builds a kriging based on the training set
+% |(x,y)|.
+% * |kr=CODES.fit.kriging(...,param,value)| uses a list of parameters
+% |param| and values |value| (_c.f._, <#params parameter table>).
+%
+% <html><a id="description"></a></html>
+%% Description
+% For a training set $\left[\underline{\mathbf{X}},\underline{Y}\right]$
+% made of pairs $\mathbf{x}^{(i)}$ and $y^{(i)}$ such that:
+%
+% $$y^{(i)}=f\left(\mathbf{x}^{(i)}\right)$$
+%
+% and a mean function $m$ and an auto-correlation function $K_\theta$, the
+% covariance function is defined as:
+%
+% $$k\left(\mathbf{x},\mathbf{x}^\prime\right)=\sigma_Y^2K_\theta\left(\mathbf{x},\mathbf{x}^\prime\right)+\sigma_n^2\mathbf{I}\left[\mathbf{x}=\mathbf{x}^\prime\right]$$
+%
+% where $\sigma_Y^2$ is the Kriging variance and $\sigma_n^2$ is the
+% inherent variance, also referred to as nugget or observation variance.
+%
+% The training covaraince matrix and mean matrix are defined as:
+%
+% $$\Sigma_{tr}=\left[\begin{array}{ccc}k\left(\mathbf{x}^{(1)},\mathbf{x}^{(1)}\right) & \dots & k\left(\mathbf{x}^{(1)},\mathbf{x}^{(n)}\right)\\\vdots & \ddots & \vdots\\k\left(\mathbf{x}^{(n)},\mathbf{x}^{(1)}\right) & \dots & k\left(\mathbf{x}^{(n)},\mathbf{x}^{(n)}\right)\end{array}\right]$$
+%
+% $$\mu_{tr}=\left[m\left(\mathbf{x}^{(1)}\right),\dots,m\left(\mathbf{x}^{(n)}\right)\right]$$
+%
+% The Kriging prediction and prediction standard error are defined as:
+%
+% $$\widetilde{f}\left(\mathbf{x}\right)=m\left(\mathbf{x}\right)+\left(\underline{Y}^T-\mu_{tr}\right)\Sigma_{tr}^{-1}\Sigma_{\mathbf{x}}^T$$
+%
+% $$\widetilde{f}^{se}\left(\mathbf{x}\right)=\sqrt{k\left(\mathbf{x},\mathbf{x}\right)-\Sigma_\mathbf{x}\Sigma_{tr}^{-1}\Sigma_\mathbf{x}^T}$$
+%
+% <html><a id="covariance"></a><h3>Correlation functions</h3></html>
+%
+% One covariance function is available:
+%
+% * Gaussian:
+%
+% $$K_\theta(\mathbf{x},\mathbf{x}^\prime)=\exp\left[\frac{||\mathbf{x}-\mathbf{x}^\prime||^2}{2\theta^2}\right]$$
+%
+% <html><a id="mean"></a><h3>Mean Functions</h3></html>
+%
+% One mean function is available:
+%
+% * 0 order polynomial:
+%
+% $$m\left(\mathbf{x}\right)=\beta$$
+%
+% <html><a id="solvers"></a><h3>Solvers</h3></html>
+%
+% Two solvers are available:
+%
+% <html><ul>
+%   <li><span class="string">'CODES'</span>: An implementation from
+%   scratch.</li>
+%   <li><span class="string">'DACE'</span> Uses the <a
+%   href="http://www.imm.dtu.dk/~hbni/dace">DACE Toolbox</a> with minor
+%   numerical improvement in the prediction.</li>
+% </ul></html>
+%
+% <html><a id="training"></a></html>
+%% Training Options
+% <html><table id="params" style="border: none">
+%   <tr>
+%     <th><span class="ms">param</span></th>
+%     <th><span class="ms">value</span></th>
+%     <th>Description</th>
+%   </tr>
+%   <tr>
+%     <td><span class="string">'scale'</span></td>
+%     <td>{<span class="string">'square'</span>}, <span class="string">'circle'</span>, <span class="string">'none'</span></td>
+%     <td>Define scaling method for the inputs (<i>c.f.</i>, <a href=#scaling>Scaling</a> for details).</td>
+%   </tr>
+%   <tr>
+%     <td><span class="string">'UseParallel'</span></td>
+%     <td>logical, {<tt>false</tt>}</td>
+%     <td>Switch to use parallel settings.</td>
+%   </tr>
+%   <tr>
+%     <td><span class="string">'theta'</span></td>
+%     <td>numeric, { [ ] }</td>
+%     <td>Value for kernel parameter. If [ ], should be calibrated.</td>
+%   </tr>
+%   <tr>
+%     <td><span class="string">'delta_2'</span></td>
+%     <td>numeric, {<tt>0</tt>}</td>
+%     <td>Only if <span class="string">'regression'</span> set to <tt>true</tt>. Value for &ldquo;nugget&rdquo; parameter. If left to default, should be calibrated.</td>
+%   </tr>
+%   <tr>
+%     <td><span class="string">'mean_fun'</span></td>
+%     <td>{<span class="string">'poly0'</span>}</td>
+%     <td>Mean value function, see <a href=#mean>Mean functions</a>.</td>
+%   </tr>
+%   <tr>
+%     <td><span class="string">'cov_fun'</span></td>
+%     <td>{<span class="string">'corr'</span>}</td>
+%     <td>Correlation function (also referred to as kernel or auto-correlation function), see <a href=#covariance>Correlation functions</a>.</td>
+%   </tr>
+%   <tr>
+%     <td><span class="string">'scale_y'</span></td>
+%     <td>{<span class="string">'square'</span>}, <span class="string">'circle'</span>, <span class="string">'none'</span></td>
+%     <td>Define scaling method for the ouputs (<i>c.f.</i>, <a href=meta.html#scaling>Scaling (meta)</a> for details)</td>
+%   </tr>
+%   <tr>
+%     <td><span class="string">'solver'</span></td>
+%     <td>{<span class="string">'CODES'</span>} or <span class="string">'DACE'</span></td>
+%     <td>Type of solver to use to train the Kriging, see <a href=#solvers>Solvers</a>.</td>
+%   </tr>
+%   <tr>
+%     <td><span class="string">'regression'</span></td>
+%     <td>logical {<tt>false</tt>}</td>
+%     <td>Whether regression kriging should be used. This is achieved by adding a &ldquo;nugget&rdquo; <span class="string">'delta_2'</span> on the diagonal of the correlation matrix, see <a href=#description>Description</a>.</td>
+%   </tr>
+%   <tr>
+%     <td><span class="string">'display'</span></td>
+%     <td>logical {<tt>true</tt>}</td>
+%     <td>Wether information should be displayed. For now, only display warning if correlation matrix needs to be conditioned (further than <span class="string">'delta_2'</span>).</td>
+%   </tr>
+%   <tr>
+%     <td><span class="string">'theta_min'</span></td>
+%     <td>numeric, { [ ] }</td>
+%     <td>Only if <span class="string">'solver'</span> set to <span class="string">'DACE'</span>. Lower bound for the <span class="string">'theta'</span> search.</td>
+%   </tr>
+%   <tr>
+%     <td><span class="string">'theta_max'</span></td>
+%     <td>numeric, { [ ] }</td>
+%     <td>Only if <span class="string">'solver'</span> set to <span class="string">'DACE'</span>. Upper bound for the <span class="string">'theta'</span> search.</td>
+%   </tr>
+% </table></html>
+%
+% <html><a id="evaluation"></a></html>
+%% Evaluation and Post-Processing
+%
+% <html>
+% <link rel="stylesheet" type="text/css" href="demoindex.css"></link>
+%     <table id="demo_table" border="0" cellspacing="0" cellpadding="0" style="width:491px">
+%         <tr class="demorow">
+%             <td class="demopanel-thumbnail"><a href="kriging_method.html"><img src="type_m-file.png"></a></td>
+%             <td class="demopanel-description"><a href="kriging_method.html">Capabilities of a <tt>Kriging</tt> object.</a><br></td>
+%         </tr>
+%     </table>
+% </html>
+%
+% <html><a id="example"></a></html>
+%% Mini tutorial
+%
+% <html>
+% <link rel="stylesheet" type="text/css" href="demoindex.css"></link>
+%     <table id="demo_table" border="0" cellspacing="0" cellpadding="0" style="width:491px">
+%         <tr class="demorow">
+%             <td class="demopanel-thumbnail"><a href="Test_fit_kriging.html"><img src="type_m-file.png"></a></td>
+%             <td class="demopanel-description"><a href="Test_fit_kriging.html">A mini tutorial of the capabilities of the <tt>Kriging</tt> class.</a><br></td>
+%         </tr>
+%     </table>
+% </html>
+%
+%% References
+% <html><ul style="list-style-type:none">
+%   <li id="ref_dace"><a href="http://www.imm.dtu.dk/~hbni/dace">DACE Toolbox</a></li>
+% </ul></html>
+%
+%%
+%%
+% <html>Copyright &copy; 2015 Computational Optimal Design of Engineering Systems
+% (CODES) Laboratory. University of Arizona.</html>
+%%
+%
+% <html><table style="border: none">
+%   <tr style="border: none">
+%     <td style="border: none;padding-left: 0px;">
+%       <a href ="http://codes.arizona.edu/"><img style="height: 50px;" src ="CODES_logo.png"></a>
+%     </td><td style="border: none; vertical-align: middle;padding-left: 10px;">
+%       <a href ="http://codes.arizona.edu/"><span style="font-weight:bold;font-family:Arial;font-size: 20px;color: #002147"><span style="color: #AB0520;">C</span>omputational <span style="color: #AB0520;">O</span>ptimal <span style="color: #AB0520;">D</span>esign of<br><span style="color: #AB0520;">E</span>ngineering <span style="color: #AB0520;">S</span>ystems</span></a>
+%     </td><td style="border: none;padding-right: 0px;">
+%       <a href = "http://www.arizona.edu/"><img style="height: 50px;" src = "AZlogo.png"></a>
+%     </td>
+%   </tr>
+% </table></html>
+
+##### SOURCE END #####
+--></body></html>

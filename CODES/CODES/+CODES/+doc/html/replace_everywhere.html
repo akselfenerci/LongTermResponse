@@ -1,0 +1,205 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>replace_everywhere</title><meta name="generator" content="MATLAB 8.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-02-02"><meta name="DC.source" content="replace_everywhere.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">A file to re publish all html doc file</a></li></ul></div><pre class="codeinput">close <span class="string">all</span>
+clear
+clc
+</pre><h2>A file to re publish all html doc file<a name="2"></a></h2><p>Super long, carefull with it</p><pre class="codeinput">dir_root=fileparts(which(<span class="string">'CODES.install'</span>));
+dirs={[dir_root <span class="string">'/+common/'</span>];<span class="keyword">...</span>
+      [dir_root <span class="string">'/+demo/'</span>];<span class="keyword">...</span>
+      [dir_root <span class="string">'/+doc/'</span>];<span class="keyword">...</span>
+      [dir_root <span class="string">'/+fit/'</span>];<span class="keyword">...</span>
+      [dir_root <span class="string">'/+sampling/'</span>];<span class="keyword">...</span>
+      [dir_root <span class="string">'/+sensitivity/'</span>]};
+<span class="keyword">for</span> j=1:length(dirs)
+    <span class="comment">% Gather doc files</span>
+    doc_files=dir(dirs{j});
+    <span class="comment">% Exclude some stuff</span>
+    tag=false(length(doc_files),1);
+    <span class="keyword">for</span> i=1:length(doc_files)
+        <span class="keyword">switch</span> doc_files(i).name
+            <span class="keyword">case</span> {<span class="string">'.'</span>,<span class="string">'..'</span>,<span class="string">'html'</span>}
+                tag(i)=true;
+            <span class="keyword">otherwise</span>
+                tag(i)=false;
+        <span class="keyword">end</span>
+        <span class="keyword">if</span> doc_files(i).name(end)==<span class="string">'~'</span>
+            tag(i)=true;
+        <span class="keyword">end</span>
+        <span class="keyword">if</span> strcmp(doc_files(i).name,<span class="string">'republish_doc.m'</span>)
+            tag(i)=true;
+        <span class="keyword">end</span>
+<span class="comment">%         if strcmp(doc_files(i).name,'replace_everywhere.m')</span>
+<span class="comment">%             tag(i)=true;</span>
+<span class="comment">%         end</span>
+        <span class="keyword">if</span> length(doc_files(i).name)&gt;3
+            <span class="keyword">if</span> strcmpi(doc_files(i).name(end-3:end),<span class="string">'.asv'</span>)
+                tag(i)=true;
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+        <span class="keyword">if</span> doc_files(i).isdir
+            tag(i)=true;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+    doc_files(tag)=[];
+    <span class="keyword">for</span> i=1:length(doc_files)
+        file_name=[dirs{j} doc_files(i).name];
+        fin=fopen(file_name,<span class="string">'r'</span>);
+        fout=fopen([file_name(1:end-1) <span class="string">'newm'</span>],<span class="string">'w'</span>);
+        <span class="keyword">while</span> ~feof(fin)
+            line=fgetl(fin);
+            <span class="comment">% BEGIN text to replace</span>
+<span class="comment">%             line=strrep(line,'2013-2015','2013-2015');</span>
+<span class="comment">%             line=strrep(line,'a=fileparts(which(''CODES.install''));file=strcat(a,''\','a=fileparts(which(''CODES.install''));file=strcat(a,''/');</span>
+            line=strrep(line,<span class="string">'.sampling.'</span>,<span class="string">'.sampling.'</span>);
+            <span class="comment">% END text to replace</span>
+            fprintf(fout,<span class="string">'%s\n'</span>,line);
+        <span class="keyword">end</span>
+        fclose(fin);
+        fclose(fout);
+        copyfile([file_name(1:end-1) <span class="string">'newm'</span>],file_name,<span class="string">'f'</span>);
+        delete([file_name(1:end-1) <span class="string">'newm'</span>]);
+
+<span class="comment">%         if strcmpi(file_name(end-1:end),'.m')</span>
+<span class="comment">%             delete([file_name(1:end-1) 'newm'])</span>
+<span class="comment">%         end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+close all
+clear
+clc
+
+%% A file to re publish all html doc file
+% Super long, carefull with it
+
+dir_root=fileparts(which('CODES.install'));
+dirs={[dir_root '/+common/'];...
+      [dir_root '/+demo/'];...
+      [dir_root '/+doc/'];...
+      [dir_root '/+fit/'];...
+      [dir_root '/+sampling/'];...
+      [dir_root '/+sensitivity/']};
+for j=1:length(dirs)
+    % Gather doc files
+    doc_files=dir(dirs{j});
+    % Exclude some stuff
+    tag=false(length(doc_files),1);
+    for i=1:length(doc_files)
+        switch doc_files(i).name
+            case {'.','..','html'}
+                tag(i)=true;
+            otherwise
+                tag(i)=false;
+        end
+        if doc_files(i).name(end)=='~'
+            tag(i)=true;
+        end
+        if strcmp(doc_files(i).name,'republish_doc.m')
+            tag(i)=true;
+        end
+%         if strcmp(doc_files(i).name,'replace_everywhere.m')
+%             tag(i)=true;
+%         end
+        if length(doc_files(i).name)>3
+            if strcmpi(doc_files(i).name(end-3:end),'.asv')
+                tag(i)=true;
+            end
+        end
+        if doc_files(i).isdir
+            tag(i)=true;
+        end
+    end
+    doc_files(tag)=[];
+    for i=1:length(doc_files)
+        file_name=[dirs{j} doc_files(i).name];
+        fin=fopen(file_name,'r');
+        fout=fopen([file_name(1:end-1) 'newm'],'w');
+        while ~feof(fin)
+            line=fgetl(fin);
+            % BEGIN text to replace
+%             line=strrep(line,'2013-2015','2013-2015');
+%             line=strrep(line,'a=fileparts(which(''CODES.install''));file=strcat(a,''\','a=fileparts(which(''CODES.install''));file=strcat(a,''/');
+            line=strrep(line,'.sampling.','.sampling.');
+            % END text to replace
+            fprintf(fout,'%s\n',line);
+        end
+        fclose(fin);
+        fclose(fout);
+        copyfile([file_name(1:end-1) 'newm'],file_name,'f');
+        delete([file_name(1:end-1) 'newm']);
+        
+%         if strcmpi(file_name(end-1:end),'.m')
+%             delete([file_name(1:end-1) 'newm'])
+%         end
+    end
+end
+
+##### SOURCE END #####
+--></body></html>

@@ -1,0 +1,15 @@
+<productinfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:noNamespaceSchemaLocation="optional">
+    <?xml-stylesheet type="text/xsl"href="optional"?>
+    <!-- info.xml file for the CODES toolbox -->
+    <!-- Author: Sylvain Lacaze -->
+    <!-- Copyright 2011-2014 Computational Optimal Design of Engineering
+         Systems (CODES) -->
+    
+    <matlabrelease>2014b</matlabrelease>
+    <name>CODES</name>
+    <type>toolbox</type>
+    <icon></icon>
+    <help_location>+CODES/+doc/html</help_location>
+    <help_contents_icon>$toolbox/matlab/icons/bookicon.gif</help_contents_icon>
+</productinfo>
