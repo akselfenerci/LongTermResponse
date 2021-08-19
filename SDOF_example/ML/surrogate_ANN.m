@@ -4,9 +4,9 @@ close all
 
 dbstop if error
 
-cd('C:\Users\akselfe\OneDrive - NTNU\DERS\matlab\LongTermResponse\SDOF_example\ML');
+cd('C:\Users\akselfe\Documents\GitHub\LongTermResponse\SDOF_example\ML');
 
-main = 'C:\Users\akselfe\OneDrive - NTNU\DERS\matlab\LongTermResponse\SDOF_example';
+main = 'C:\Users\akselfe\Documents\GitHub\LongTermResponse\SDOF_example';
 
 
 tag = 'surrogate';
@@ -17,7 +17,7 @@ mkdir(figdir);
 savedir = strcat(main,'\saved\',tag);
 mkdir(savedir);
 
-dataset = load('Dataset_unifromgrid.mat');
+dataset = load(strcat(savedir,'\Dataset_unifromgrid.mat'));
 
 
 %%

@@ -49,7 +49,7 @@ figure; plot(xvals(:,1),real(Xd),'x');
 
 Input_Output = [U1vec U2vec U3vec U4vec Xd];
 
-save(strcat(savedir,'Dataset_unifromgrid'),'Input', 'Output');
+save(strcat(savedir,'Dataset_unifromgrid'),'Input_Output');
 
 
 %%
